@@ -13,10 +13,15 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "babel-core": "^6.8.0",
     "normalize.css": "3.0.3",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
-    "spectacle": "^1.0.0"
+    "recompose": "^0.18.0",
+    "rx": "^4.1.0",
+    "rx-recompose": "^0.6.2",
+    "spectacle": "^1.0.0",
+    "spectacle-code-slide": "^0.1.10"
   },
   "devDependencies": {
     "autoprefixer-core": "^6.0.1",

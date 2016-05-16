@@ -35,7 +35,6 @@ import Interactive from "../assets/interactive";
 require("normalize.css");
 require("spectacle/lib/themes/default/index.css");
 
-
 const images = {
   city: require("../assets/city.jpg"),
   kat: require("../assets/kat.png"),
@@ -46,7 +45,9 @@ const images = {
 preloader(images);
 
 const theme = createTheme({
-  primary: "#ff4081"
+  background: "#555a5f",
+  primary: "#555a5f",
+  secondary: "white"
 });
 
 export default class Presentation extends React.Component {
@@ -54,26 +55,80 @@ export default class Presentation extends React.Component {
     return (
       <Spectacle theme={theme}>
         <Deck transition={["zoom", "slide"]} transitionDuration={500}>
-          <Slide transition={["zoom"]} bgColor="primary">
-            <Heading size={1} fit caps lineHeight={1} textColor="black">
-              Spectacle
+          <Slide transition={["zoom"]} bgColor="background" >
+            <Heading size={1} fit caps lineHeight={1} textColor="secondary">
+              Reactive UI
             </Heading>
-            <Heading size={1} fit caps>
-              A ReactJS Presentation Library
-            </Heading>
-            <Heading size={1} fit caps textColor="black">
-              Where You Can Write Your Decks In JSX
+            <Heading size={1} fit caps textColor="secondary">
+               With Rx and react
             </Heading>
             <Link href="https://github.com/FormidableLabs/spectacle">
               <Text bold caps textColor="tertiary">View on Github</Text>
             </Link>
-            <Text textSize="1.5em" margin="20px 0px 0px" bold>Hit Your Right Arrow To Begin!</Text>
+            <Text textSize="1.5em" margin="20px 0px 0px" bold>Yshay Yaacobi @ Soluto</Text>
+            <Text textSize="1.5em" margin="20px 0px 0px" bold>yshayy@gmail.com</Text>
           </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="You can even put notes on your slide. How awesome is that?">
-            <Image src={images.kat.replace("/", "")} margin="0px auto 40px" height="293px"/>
-            <Heading size={2} caps fit textColor="primary" textFont="primary">
-              Wait what?
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              About me
             </Heading>
+          </Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              About Soluto
+            </Heading>
+          </Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={4} caps fit textColor="secondary" textFont="primary">
+              Let's start with Rx!
+            </Heading>
+            <List>
+              <Appear><ListItem>What?</ListItem></Appear>
+              <Appear><ListItem>When?</ListItem></Appear>
+              <Appear><ListItem>Why?</ListItem></Appear>
+              <Appear><ListItem>How?</ListItem></Appear>
+              <Appear><ListItem>...</ListItem></Appear>
+              <Appear><ListItem>...</ListItem></Appear>
+              <Appear><ListItem>Profit!</ListItem></Appear>
+            </List>
+          </Slide>
+          <Slide>
+          <Heading size={4} caps textColor="secondary" textFont="primary">
+              What?
+          </Heading>
+          <iframe src="http://reactivex.io/" style={{width: "100%", height: 600}} />
+          </Slide>
+          <Slide>
+          <Heading size={4} caps textColor="secondary" textFont="primary">
+              What?
+          </Heading>
+          <List>
+            <ListItem>"An API for asynchronous programming with observable streams" (reactivex.io)</ListItem>
+            <Appear><ListItem>??</ListItem></Appear>
+            <Appear><ListItem>"Rx is a combination of the best ideas from the Observer pattern, the Iterator pattern, and functional programming" 
+            (reactivex.io)
+            </ListItem></Appear>
+            <Appear><ListItem>????</ListItem></Appear>
+            </List>
+          </Slide>
+          <Slide>
+            <Heading size={4} caps textColor="secondary" textFont="primary">
+                What?
+            </Heading>
+            <List>
+              <ListItem>"An API for asynchronous programming with observable streams" (reactivex.io)</ListItem>
+              <Appear><ListItem>??</ListItem></Appear>
+              <Appear><ListItem>"Rx is a combination of the best ideas from the Observer pattern, the Iterator pattern, and functional programming" 
+              (reactivex.io)
+              </ListItem></Appear>
+              <Appear><ListItem>????</ListItem></Appear>
+              </List>
+          </Slide>
+          <Slide>
+            <Heading size={4} caps textColor="secondary" textFont="primary">
+                What?
+            </Heading>
+            <Text>Rx is all about collections!</Text>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary" notes="<ul><li>talk about that</li><li>and that</li></ul>">
             <CodePane
@@ -85,7 +140,7 @@ export default class Presentation extends React.Component {
           <Slide transition={["slide"]} bgImage={images.city.replace("/", "")} bgDarken={0.75}>
             <Appear fid="1">
               <Heading size={1} caps fit textColor="primary">
-                Full Width
+                Full Height
               </Heading>
             </Appear>
             <Appear fid="2">
