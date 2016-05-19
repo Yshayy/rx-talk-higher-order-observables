@@ -1,6 +1,7 @@
 // Import React
 import React from "react";
-
+import ConsoleRunner from "./helpers/ConsoleRunner";
+import {Observable} from "rx";
 // Import Spectacle Core tags
 import {
   Appear,
@@ -70,8 +71,13 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
             <Heading size={2} caps textColor="secondary" textFont="primary">
-              About me
+              Agenda
             </Heading>
+            <List>
+              <ListItem>Introduction to Rx</ListItem>
+              <ListItem>Building a sample app</ListItem>
+              <Text>All the code is available online</Text>
+            </List>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
             <Heading size={2} caps textColor="secondary" textFont="primary">
@@ -105,7 +111,7 @@ export default class Presentation extends React.Component {
           <List>
             <ListItem>"An API for asynchronous programming with observable streams" (reactivex.io)</ListItem>
             <Appear><ListItem>??</ListItem></Appear>
-            <Appear><ListItem>"Rx is a combination of the best ideas from the Observer pattern, the Iterator pattern, and functional programming" 
+            <Appear><ListItem>"Rx is a combination of the best ideas from the Observer pattern, the Iterator pattern, and functional programming"
             (reactivex.io)
             </ListItem></Appear>
             <Appear><ListItem>????</ListItem></Appear>
@@ -118,7 +124,7 @@ export default class Presentation extends React.Component {
             <List>
               <ListItem>"An API for asynchronous programming with observable streams" (reactivex.io)</ListItem>
               <Appear><ListItem>??</ListItem></Appear>
-              <Appear><ListItem>"Rx is a combination of the best ideas from the Observer pattern, the Iterator pattern, and functional programming" 
+              <Appear><ListItem>"Rx is a combination of the best ideas from the Observer pattern, the Iterator pattern, and functional programming"
               (reactivex.io)
               </ListItem></Appear>
               <Appear><ListItem>????</ListItem></Appear>
@@ -131,11 +137,18 @@ export default class Presentation extends React.Component {
             <Text>Rx is all about collections!</Text>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary" notes="<ul><li>talk about that</li><li>and that</li></ul>">
-            <CodePane
-              lang="jsx"
-              source={require("raw!../assets/deck.example")}
-              margin="20px auto"
-            />
+              <div>
+              <Heading size={6} textColor="secondary">Array - Collection over space (memory based)</Heading>
+              <ConsoleRunner code={require("raw!../assets/simple-collections/array.js.asset").split("###")} maxLines={7} />
+              </div>
+            <Appear>
+              <div>
+              <Heading size={6} textColor="secondary">Observable - Collection over time (event based)</Heading>
+              <ConsoleRunner maxLines={7} code={require("raw!../assets/simple-collections/rx.js.asset").split("###")}
+                imports={{Observable}}
+              />
+              </div>
+            </Appear>
           </Slide>
           <Slide transition={["slide"]} bgImage={images.city.replace("/", "")} bgDarken={0.75}>
             <Appear fid="1">

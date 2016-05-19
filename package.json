@@ -14,7 +14,9 @@
   "license": "MIT",
   "dependencies": {
     "babel-core": "^6.8.0",
+    "babel-standalone": "^6.7.7",
     "normalize.css": "3.0.3",
+    "ramda": "^0.21.0",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "recompose": "^0.18.0",
