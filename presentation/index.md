@@ -15,5 +15,6 @@
     - Reprise - rx can help you improve as developers 
     - Soluto use rx all along our products
     - We're hiring (3min)
-    
+    - Questions (2min)
+# Appendix
 # Overall (38 min)
