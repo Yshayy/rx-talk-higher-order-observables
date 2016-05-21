@@ -121,51 +121,41 @@ export default class Presentation extends React.Component {
             <Heading size={4} caps textColor="secondary" textFont="primary">
                 What?
             </Heading>
-            <List>
-              <ListItem>"An API for asynchronous programming with observable streams" (reactivex.io)</ListItem>
-              <Appear><ListItem>??</ListItem></Appear>
-              <Appear><ListItem>"Rx is a combination of the best ideas from the Observer pattern, the Iterator pattern, and functional programming"
-              (reactivex.io)
-              </ListItem></Appear>
-              <Appear><ListItem>????</ListItem></Appear>
-              </List>
-          </Slide>
-          <Slide>
-            <Heading size={4} caps textColor="secondary" textFont="primary">
-                What?
-            </Heading>
             <Text>Rx is all about collections!</Text>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary" notes="<ul><li>talk about that</li><li>and that</li></ul>">
               <div>
-              <Heading size={6} textColor="secondary">Array - Collection over space (memory based)</Heading>
+              <Heading size={6} textColor="secondary">Array - Collection (pull, memory based)</Heading>
               <ConsoleRunner code={require("raw!../assets/simple-collections/array.js.asset").split("###")} maxLines={7} />
               </div>
             <Appear>
               <div>
-              <Heading size={6} textColor="secondary">Observable - Collection over time (event based)</Heading>
+              <Heading size={6} textColor="secondary">Observable - Collection (push, time/event based)</Heading>
               <ConsoleRunner maxLines={7} code={require("raw!../assets/simple-collections/rx.js.asset").split("###")}
                 imports={{Observable}}
               />
               </div>
             </Appear>
           </Slide>
-          <Slide transition={["slide"]} bgImage={images.city.replace("/", "")} bgDarken={0.75}>
-            <Appear fid="1">
-              <Heading size={1} caps fit textColor="primary">
-                Full Height
-              </Heading>
-            </Appear>
-            <Appear fid="2">
-              <Heading size={1} caps fit textColor="tertiary">
-                Adjustable Darkness
-              </Heading>
-            </Appear>
-            <Appear fid="3">
-              <Heading size={1} caps fit textColor="primary">
-                Background Imagery
-              </Heading>
-            </Appear>
+          <Slide transition={["slide"]}  bgDarken={0.75}>
+            <Text size={1} >
+                If we look on Events as collections...
+             </Text>
+             <Appear>
+             <Text>
+                We can use all our collection tools and knowledge to process events which lead us to...
+             </Text>
+             </Appear>
+             <Appear>
+             <Text caps fit>
+                Functional Programming!
+             </Text>
+             </Appear>
+          </Slide>
+          <Slide transition={["slide"]} bgDarken={0.75}>
+            <Text size={3} caps >
+                Make no mistake, Rx observables relate to functional programming as much as reactive programming.
+             </Text>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
             <Heading caps fit>Flexible Layouts</Heading>
@@ -181,57 +171,6 @@ export default class Presentation extends React.Component {
                 </Heading>
               </Fill>
             </Layout>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black">
-            <BlockQuote>
-              <Quote>Wonderfully formatted quotes</Quote>
-              <Cite>Ken Wheeler</Cite>
-            </BlockQuote>
-          </Slide>
-          <Slide transition={["spin", "zoom"]} bgColor="tertiary">
-            <Heading caps fit size={1} textColor="primary">
-              Inline Markdown
-            </Heading>
-            <Markdown>
-              {`
-![Markdown Logo](${images.markdown.replace("/", "")})
-
-You can write inline images, [Markdown Links](http://commonmark.org), paragraph text and most other markdown syntax
-* Lists too!
-* With ~~strikethrough~~ and _italic_
-* And lets not forget **bold**
-              `}
-            </Markdown>
-          </Slide>
-          <Slide transition={["slide", "spin"]} bgColor="primary">
-            <Heading caps fit size={1} textColor="tertiary">
-              Smooth
-            </Heading>
-            <Heading caps fit size={1} textColor="secondary">
-              Combinable Transitions
-            </Heading>
-          </Slide>
-          <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-            <List>
-              <Appear><ListItem>Inline style based theme system</ListItem></Appear>
-              <Appear><ListItem>Autofit text</ListItem></Appear>
-              <Appear><ListItem>Flexbox layout system</ListItem></Appear>
-              <Appear><ListItem>React-Router navigation</ListItem></Appear>
-              <Appear><ListItem>PDF export</ListItem></Appear>
-              <Appear><ListItem>And...</ListItem></Appear>
-            </List>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="primary">
-            <Heading size={1} caps fit textColor="tertiary">
-              Your presentations are interactive
-            </Heading>
-            <Interactive/>
-          </Slide>
-          <Slide transition={["spin", "slide"]} bgColor="tertiary">
-            <Heading size={1} caps fit lineHeight={1.5} textColor="primary">
-              Made with love in Seattle by
-            </Heading>
-            <Link href="http://www.formidablelabs.com"><Image width="100%" src={images.logo}/></Link>
           </Slide>
         </Deck>
       </Spectacle>
