@@ -5,6 +5,9 @@ import ConsoleOutput from "./helpers/outputs/Console";
 import DomOutput from "./helpers/outputs/Dom";
 import Rx, {Observable} from "rx";
 import "rx-dom";
+import $ from "jquery";
+require("./helpers/inject-op-tooltips");
+
 // Import Spectacle Core tags
 import {
   Appear,
@@ -35,40 +38,6 @@ import createTheme from "spectacle/lib/themes/default";
 // Import custom component
 import Interactive from "../assets/interactive";
 
-const createToolTip = () => {
-  const el = document.createElement("div");
-  el.style.position = "fixed";
-  el.style.backgroundColor = "rgba(255,255,255, 0.9)";
-  el.style.borderRadius = "10px";
-  document.body.appendChild(el);
-  return {
-    getValue() { return el;},
-    dispose() { document.body.removeChild(el);}
-  };
-};
-
-
-Rx.Observable.fromEvent(document.body, "mouseover")
-             .distinctUntilChanged(e=> e.target)
-             .debounce(200)
-             .flatMapLatest(e => Observable.just(e.target)
-                  .filter(el=> el.classList.contains("token"))
-                  .map(el => el.textContent)
-                  .filter(op => op && !!(Rx.Observable.prototype[op]))
-                  .flatMap(op => Observable.using(() => createToolTip(), tip => {
-                    const el = tip.getValue();
-                    const rect = e.target.getBoundingClientRect();
-                    const img = document.createElement("img");
-                    img.src = "http://reactivex.io/documentation/operators/images/" + op + ".png";
-                    img.style.height = "300px";
-                    el.appendChild(img);
-                    
-                    el.style.top = (rect.top - 350) + "px";
-                    el.style.left = rect.left + "px";
-                    
-                    return Observable.never();
-                  })))
-             .subscribe();
 
 const getTranslationUrl = (text) => `https://api-platform.systran.net/translation/text/translate?input=${text}&source=en&target=it&withSource=false&withAnnotations=false&backTranslation=false&encoding=utf-8&key=53db3c6e-55f4-4f0f-971c-ea17891d5d16`;
 
