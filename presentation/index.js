@@ -1,11 +1,12 @@
 // Import React
-import React from "react";
+import React, {Component} from "react";
 import Runner from "./helpers/Runner";
 import ConsoleOutput from "./helpers/outputs/Console";
 import DomOutput from "./helpers/outputs/Dom";
-import Rx, {Observable} from "rx";
+import Rx, {Observable, Subject} from "rx";
+import { createComponent, createEventHandler } from "rx-recompose";
+import ReactDOM from "react-dom";
 import "rx-dom";
-import $ from "jquery";
 require("./helpers/inject-op-tooltips");
 
 // Import Spectacle Core tags
@@ -175,8 +176,8 @@ export default class Presentation extends React.Component {
                 getTranslationUrl,
                 translateAsync,
                 appendLine,
-                getInputElement:(context) => context.elems.translateExampleInput,
-                getViewElement:(context) => context.elems.translateExampleOutput
+                getInputElement:({elems:{translateExampleInput}}) => translateExampleInput,
+                getViewElement:({elems:{translateExampleOutput}}) => translateExampleOutput
               }} >
               <DomOutput>
                   <input type="text" id="translateExampleInput" ></input>
@@ -186,6 +187,21 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
             <Heading caps fit>Rx timeline</Heading>
+          </Slide>
+          <Slide transition={["zoom", "fade"]} bgColor="primary">
+            <Heading caps fit>Rx ecosystem in React</Heading>
+          </Slide>
+          <Slide transition={["zoom", "fade"]} bgColor="primary">
+            <Heading size={5} textColor="secondary" caps>React Example</Heading>
+            <Runner maxLines={20} code={require("raw!../assets/react/example.js.asset").split("###")}
+              imports={{React, Component, Subject,
+                Observable, ReactDOM, createComponent, createEventHandler,
+                getAppContainer: ({elems: {reactExampleContainer}}) => reactExampleContainer
+              }} >
+              <DomOutput>
+                  <div id="reactExampleContainer" ></div>
+              </DomOutput>
+           </Runner>
           </Slide>
         </Deck>
       </Spectacle>

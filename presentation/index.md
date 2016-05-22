@@ -9,7 +9,7 @@
     - Translate example + Marbles Diagram (8min)
     - Rx Ecosystm - Short history (rx is not new, and it's been standardized) (3min)
 # Rx and ract
-    - Ecosystem
+    - Ecosystem (Building React Component)
     - Building twitter agent (15min)
 # Closing
     - Reprise - rx can help you improve as developers 

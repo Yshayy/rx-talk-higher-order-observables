@@ -12,7 +12,6 @@ const render = (runner, children) => {
     let elems = R.fromPairs(Array.from(e.querySelectorAll("*")).filter(el => !!(el.id)).map(el => ([el.id, el])));
     runner({elems});
   };
-  console.log(str);
   return (<div key={new Date()} className="domoutput"
     dangerouslySetInnerHTML= {{__html: str}}
     ref={onComponentLoad}

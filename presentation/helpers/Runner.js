@@ -19,22 +19,26 @@ const objToKeyValueArrays = (o) => R.pipe(R.toPairs,
                                                                   , {keys: [], values: []}))(o);
 
 
-const buildLayout = (maxLines) => (codeView, runButtonView, outputView) => (
-  <div style={{position: "relative", backgroundColor: "#2d2d2d", margin: 10 }}>
-  <Layout>
-      <Fill>
+const buildLayout = (maxLines) => (codeView, runButtonView, outputView) => {
+  let ref = null;
+  const tryFullScreen = () => ref && ref.webkitRequestFullscreen();
+  return (
+  <div ref={(e) => ref = e} style={{position: "relative", width: "100%", height: "100%", backgroundColor: "#2d2d2d", margin: 10 }}>
+  <div style={{display: "flex", flexDirection: "column", minHeight: maxLines * 30, height: "100%"}}>
+  <Layout style={{flexGrow: 1}}>
+      <Fill style={{position: "relative"}}>
       {codeView}
       </Fill>
-      <Fit>
-      <div style={{color: "white", height: maxLines * 30, borderLeft: "1px dashed white", paddingLeft: 10, fontSize: 14, textAlign: "left", width: 300 }} >
+      <Fit style={{minWidth: 300, color: "white", borderLeft: "1px dashed white", paddingLeft: 10, fontSize: 14, textAlign: "left", width: 300 }}>
       <div>Output</div>
       {outputView}
-      </div>
       </Fit>
   </Layout>
-  <div style={{position: "absolute", top: 10, right: 10}} >{runButtonView}</div>
   </div>
-);
+  <div style={{position: "absolute", top: 10, right: 10}} >{runButtonView}</div>
+  <div style={{position: "absolute", bottom: 10, right: 10}} ><button style={{backgroundColor: "#2d2d2d"}} onClick={tryFullScreen}>[]</button></div>
+  </div>
+);};
 
 const lockKeys = {
   onKeyUp(e) {e.stopPropagation();},
@@ -47,7 +51,7 @@ const lockKeys = {
 const createEditor = (code) => {
   const {handler: updateCode, stream: codeUpdates$ } = createEventHandler();
   const {handler: refresh, stream: refreshActions$ } = createEventHandler();
-  const code$ = codeUpdates$.startWith(code[0]);
+  const code$ = codeUpdates$.distinctUntilChanged().startWith(code[0]);
   let currentRef = null;
   const view$ = refreshActions$.map((x, i) => i).startWith(null)
                 .withLatestFrom(code$,
@@ -56,7 +60,11 @@ const createEditor = (code) => {
                    <div>
                    <div style={{ textAlign: "left", wordBreak: "break-all"}}>{code.map((c, i) => <button key={i} style={{marginLeft: 10, backgroundColor: "#2d2d2d", fontSize: 12 }}
                     onClick={ (e) => {updateCode(c); refresh();}} >{i + 1}</button>)}</div>
-                   <div key={key} contentEditable ref={ (e) => {
+                   <div style={{overflowY:"auto", position:"absolute",
+                   top:40,
+                   left:0,
+                   right:0,
+                   bottom:0}} key={key} contentEditable ref={ (e) => {
                      if (!e) { return; }
                      currentRef = e;
                    }
