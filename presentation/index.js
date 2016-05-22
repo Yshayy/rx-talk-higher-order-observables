@@ -135,15 +135,6 @@ export default class Presentation extends React.Component {
             <Heading size={4} caps fit textColor="secondary" textFont="primary">
               Let's start with Rx!
             </Heading>
-            <List>
-              <Appear><ListItem>What?</ListItem></Appear>
-              <Appear><ListItem>When?</ListItem></Appear>
-              <Appear><ListItem>Why?</ListItem></Appear>
-              <Appear><ListItem>How?</ListItem></Appear>
-              <Appear><ListItem>...</ListItem></Appear>
-              <Appear><ListItem>...</ListItem></Appear>
-              <Appear><ListItem>Profit!</ListItem></Appear>
-            </List>
           </Slide>
           <Slide>
           <Heading size={4} caps textColor="secondary" textFont="primary">
