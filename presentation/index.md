@@ -7,7 +7,7 @@
     - Event = Collection Example (5min)
     - Functional Programming for manipulating connections
     - Translate example + Marbles Diagram (8min)
-    - When - Short history (rx is not new, and it's been standardized) (3min)
+    - Rx Ecosystm - Short history (rx is not new, and it's been standardized) (3min)
 # Rx and ract
     - Ecosystem
     - Building twitter agent (15min)

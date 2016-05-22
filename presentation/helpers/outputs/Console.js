@@ -10,14 +10,14 @@ const doOnSubscribe = (o, action) => Observable.create((sub) => {
 
 const createConsoleObservable = (runner) => {
   const { handler: log, stream: logs$ } = createEventHandler();
-  const output = {log,
+  const context = {log,
       info: log,
       error: log,
       warning: log};
 
   return doOnSubscribe(logs$, () => {
     try {
-      runner(output);
+      runner(context);
     } catch (ex) {
       log("error:" + ex);
     }});
