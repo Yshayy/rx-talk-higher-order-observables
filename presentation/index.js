@@ -125,21 +125,21 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary" notes="<ul><li>talk about that</li><li>and that</li></ul>">
               <div>
-              <Heading size={6} textColor="secondary">Array - Collection (pull, memory based)</Heading>
+              <Heading size={6} textColor="secondary">Array - Collection over space (memory based)</Heading>
               <ConsoleRunner code={require("raw!../assets/simple-collections/array.js.asset").split("###")} maxLines={7} />
               </div>
             <Appear>
               <div>
-              <Heading size={6} textColor="secondary">Observable - Collection (push, time/event based)</Heading>
+              <Heading size={6} textColor="secondary">Observable - Collection over time (event based)</Heading>
               <ConsoleRunner maxLines={7} code={require("raw!../assets/simple-collections/rx.js.asset").split("###")}
                 imports={{Observable}}
               />
               </div>
             </Appear>
           </Slide>
-          <Slide transition={["slide"]}  bgDarken={0.75}>
+          <Slide transition={["slide"]} bgDarken={0.75}>
             <Text size={1} >
-                If we look on Events as collections...
+                If we look on Event streams as collections...
              </Text>
              <Appear>
              <Text>
@@ -154,23 +154,14 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide transition={["slide"]} bgDarken={0.75}>
             <Text size={3} caps >
-                Make no mistake, Rx observables relate to functional programming as much as reactive programming.
+                And that's the essence of RX and reactive programming/frp.
              </Text>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading caps fit>Flexible Layouts</Heading>
-            <Layout>
-              <Fill>
-                <Heading size={4} caps textColor="secondary" bgColor="white" margin={10}>
-                  Left
-                </Heading>
-              </Fill>
-              <Fill>
-                <Heading size={4} caps textColor="secondary" bgColor="white" margin={10}>
-                  Right
-                </Heading>
-              </Fill>
-            </Layout>
+            <Heading caps fit>Translate Example</Heading>
+          </Slide>
+          <Slide transition={["zoom", "fade"]} bgColor="primary">
+            <Heading caps fit>Rx timeline</Heading>
           </Slide>
         </Deck>
       </Spectacle>
