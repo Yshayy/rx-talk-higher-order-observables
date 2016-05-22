@@ -1,17 +1,17 @@
 const collection = Observable.interval(1000).take(6);
-collection.forEach( x => output.log(x));
+collection.forEach( x => context.log(x));
 // [0....1....2....3....4....5];
 ###
 const collection = Observable.interval(1000).take(6);
-collection.map(x=>x*2).forEach( x => output.log(x));
+collection.map(x=>x*2).forEach( x => context.log(x));
 // [0....2....4....6....8....10];
 ###
 const collection = Observable.interval(1000).take(6);
 collection.map(x=>x*2)
           .filter(x=>x>5)
-          .forEach( x => output.log(x));
+          .forEach( x => context.log(x));
 // [0..............6....8....10];
 ###
 const array = [0, 1, 2, 3, 4, 5];
 const collection = Observable.fromArray(array);
-collection.forEach( x => output.log(x));
+collection.forEach( x => context.log(x));

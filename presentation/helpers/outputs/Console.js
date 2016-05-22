@@ -23,18 +23,6 @@ const createConsoleObservable = (runner) => {
     }});
 };
 
-/*
-export default ({runner$}) => (
-  runner$.flatMapLatest((runner) =>
-  createConsoleObservable(runner)
-  .map((x) => [x])
-  .scan((a, b) => [...a, ...b])
-  .startWith([])
-  )
-  .startWith([])
-  .map((logs) => (<pre style={{fontSize: "1.1rem"}}>{logs.join("\n")}</pre>))
-);*/
-
 export default createComponent((props$) => (props$.flatMapLatest(({runner}) =>
   createConsoleObservable(runner)
   .map((x) => [x])

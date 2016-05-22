@@ -1,8 +1,10 @@
 // Import React
 import React from "react";
-import ConsoleRunner from "./helpers/Runner";
+import Runner from "./helpers/Runner";
 import ConsoleOutput from "./helpers/outputs/Console";
-import {Observable} from "rx";
+import DomOutput from "./helpers/outputs/Dom";
+import Rx, {Observable} from "rx";
+import "rx-dom";
 // Import Spectacle Core tags
 import {
   Appear,
@@ -32,6 +34,50 @@ import createTheme from "spectacle/lib/themes/default";
 
 // Import custom component
 import Interactive from "../assets/interactive";
+
+const createToolTip = () => {
+  const el = document.createElement("div");
+  el.style.position = "fixed";
+  el.style.backgroundColor = "rgba(255,255,255, 0.9)";
+  el.style.borderRadius = "10px";
+  document.body.appendChild(el);
+  return {
+    getValue() { return el;},
+    dispose() { document.body.removeChild(el);}
+  };
+};
+
+
+Rx.Observable.fromEvent(document.body, "mouseover")
+             .distinctUntilChanged(e=> e.target)
+             .debounce(200)
+             .flatMapLatest(e => Observable.just(e.target)
+                  .filter(el=> el.classList.contains("token"))
+                  .map(el => el.textContent)
+                  .filter(op => op && !!(Rx.Observable.prototype[op]))
+                  .flatMap(op => Observable.using(() => createToolTip(), tip => {
+                    const el = tip.getValue();
+                    const rect = e.target.getBoundingClientRect();
+                    const img = document.createElement("img");
+                    img.src = "http://reactivex.io/documentation/operators/images/" + op + ".png";
+                    img.style.height = "300px";
+                    el.appendChild(img);
+                    
+                    el.style.top = (rect.top - 350) + "px";
+                    el.style.left = rect.left + "px";
+                    
+                    return Observable.never();
+                  })))
+             .subscribe();
+
+const getTranslationUrl = (text) => `https://api-platform.systran.net/translation/text/translate?input=${text}&source=en&target=it&withSource=false&withAnnotations=false&backTranslation=false&encoding=utf-8&key=53db3c6e-55f4-4f0f-971c-ea17891d5d16`;
+
+const appendLine = (el, line) => el.textContent = line + "\n" + el.textContent;
+
+const translateAsync = (text) => Observable.fromPromise(
+   () => fetch(getTranslationUrl(text))
+        .then((res) => res.json())
+        .then((res) => res.outputs[0].output));
 
 // Require CSS
 require("normalize.css");
@@ -127,18 +173,18 @@ export default class Presentation extends React.Component {
           <Slide transition={["zoom", "fade"]} bgColor="primary" notes="<ul><li>talk about that</li><li>and that</li></ul>">
               <div>
               <Heading size={6} textColor="secondary">Array - Collection over space (memory based)</Heading>
-              <ConsoleRunner code={require("raw!../assets/simple-collections/array.js.asset").split("###")} maxLines={7} >
+              <Runner code={require("raw!../assets/simple-collections/array.js.asset").split("###")} maxLines={7} >
               <ConsoleOutput/>
-              </ConsoleRunner>
+              </Runner>
               </div>
             <Appear>
               <div>
               <Heading size={6} textColor="secondary">Observable - Collection over time (event based)</Heading>
-              <ConsoleRunner maxLines={7} code={require("raw!../assets/simple-collections/rx.js.asset").split("###")}
+              <Runner maxLines={7} code={require("raw!../assets/simple-collections/rx.js.asset").split("###")}
                 imports={{Observable}}
               >
               <ConsoleOutput/>
-              </ConsoleRunner>
+              </Runner>
               </div>
             </Appear>
           </Slide>
@@ -163,7 +209,20 @@ export default class Presentation extends React.Component {
              </Text>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading caps fit>Translate Example</Heading>
+            <Heading size={4} textColor="secondary" caps>Translate Example</Heading>
+            <Runner maxLines={15} code={require("raw!../assets/translate/translate.js.asset").split("###")}
+              imports={{Rx, Observable,
+                getTranslationUrl,
+                translateAsync,
+                appendLine,
+                getInputElement:(context) => context.elems.translateExampleInput,
+                getViewElement:(context) => context.elems.translateExampleOutput
+              }} >
+              <DomOutput>
+                  <input type="text" id="translateExampleInput" ></input>
+                  <pre style={{maxHeight: 200, overflow: "auto"}} id="translateExampleOutput"></pre>
+              </DomOutput>
+           </Runner>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
             <Heading caps fit>Rx timeline</Heading>

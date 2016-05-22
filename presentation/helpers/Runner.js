@@ -76,7 +76,7 @@ const createComponentView = ({ children, imports = {}, code, maxLines = 10}) => 
   const runButtonView$ = runnerState.map((state) => <button style={{backgroundColor: "#2d2d2d"}} onClick={toggleRunner}>{state ? "Pause" : "Run"}</button>);
   const output = children;
   const {keys: variables, values: refs} = objToKeyValueArrays(imports);
-  const createrRunner = (currentCode) => (output) => Function("output", ...variables, Babel.transform(currentCode, {
+  const createrRunner = (currentCode) => (output) => Function("context", ...variables, Babel.transform(currentCode, {
     presets: [ "es2015", "react", "stage-0"]
   }).code)(output, ...refs);
   const output$ = code$.pausable(runnerState).map((c) => {
