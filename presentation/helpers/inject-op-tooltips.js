@@ -17,8 +17,6 @@ const createToolTip = (id) => {
 const rxImages =
 ["map", "filter", "switch", "distinctUntilChanged", "flatMap"].reduce((acc, op) => ({[op]: `http://reactivex.io/documentation/operators/images/${op}.png`, ...acc } ), {});
 
-console.log(rxImages);
-
 Rx.Observable.fromEvent(document.body, "mouseover")
              .distinctUntilChanged(e => e.target)
              .debounce(400)
