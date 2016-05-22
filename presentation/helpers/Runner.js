@@ -4,6 +4,7 @@ import { pure } from "recompose";
 import R from "ramda";
 import {Observable} from "rx";
 import * as Babel from "babel-standalone";
+
 import {
   Fit,
   Fill,
@@ -11,38 +12,14 @@ import {
   CodePane
 } from "spectacle";
 
-const {just, combineLatest} = Observable;
+const {combineLatest} = Observable;
 
 const objToKeyValueArrays = (o) => R.pipe(R.toPairs,
                                        R.reduce((acc, [key, value]) => ({keys: [...acc.keys, key], values: [...acc.values, value]})
                                                                   , {keys: [], values: []}))(o);
 
-const doOnSubscribe = (o, action) => Observable.create((sub) => {
-  const subscription = o.subscribe(sub);
-  action();
-  return subscription;
-});
 
-const createConsoleObservable = ({imports, code}) => {
-  const {keys: variables, values: refs} = objToKeyValueArrays(imports);
-  const { handler: log, stream: logs$ } = createEventHandler();
-  const run = () => Function("output", ...variables, Babel.transform(code, {
-    presets: [ "es2015", "react", "stage-0"]
-  }).code)(
-    {
-      log,
-      info: log,
-      error: log,
-      warning: log}, ...refs);
-  return doOnSubscribe(logs$, () => {
-    try {
-      run();
-    } catch (ex) {
-      log("error:" + ex);
-    }});
-};
-
-const buildLayout = (maxLines) => (codeView, runButtonView, logsView) => (
+const buildLayout = (maxLines) => (codeView, runButtonView, outputView) => (
   <div style={{position: "relative", backgroundColor: "#2d2d2d", margin: 10 }}>
   <Layout>
       <Fill>
@@ -50,8 +27,8 @@ const buildLayout = (maxLines) => (codeView, runButtonView, logsView) => (
       </Fill>
       <Fit>
       <div style={{color: "white", height: maxLines * 30, borderLeft: "1px dashed white", paddingLeft: 10, fontSize: 14, textAlign: "left", width: 300 }} >
-      <div>Console</div>
-      {logsView}
+      <div>Output</div>
+      {outputView}
       </div>
       </Fit>
   </Layout>
@@ -59,11 +36,13 @@ const buildLayout = (maxLines) => (codeView, runButtonView, logsView) => (
   </div>
 );
 
-let lockKeys = {
+const lockKeys = {
   onKeyUp(e) {e.stopPropagation();},
   onKeyPress(e) {e.stopPropagation();},
   onKeyDown(e) {e.stopPropagation();}
 };
+
+
 
 const createEditor = (code) => {
   const {handler: updateCode, stream: codeUpdates$ } = createEventHandler();
@@ -89,23 +68,24 @@ const createEditor = (code) => {
   };
 };
 
-const createComponentView = ({ imports = {}, code, maxLines = 10}) => {
+const createComponentView = ({ children, imports = {}, code, maxLines = 10}) => {
   code = (R.isArrayLike(code) ? code : [code]).map((x) => x.trim());
   const {handler: toggleRunner, stream: runnerToggles$ } = createEventHandler();
   const {code$, view$: codeView$} = createEditor(code);
   const runnerState = runnerToggles$.scan((acc) => !acc).startWith(false);
-  const runView$ = runnerState.map((state) => <button style={{backgroundColor: "#2d2d2d"}} onClick={toggleRunner}>{state ? "Pause" : "Run"}</button>);
-  const logsView$ = code$.pausable(runnerState).flatMapLatest((c) =>
-                                createConsoleObservable({ imports, code: c})
-                                .map((x) => [x])
-                                .scan((a, b) => [...a, ...b])
-                                .startWith([])
-                                )
-                                .startWith([])
-                                .map((logs) => (
-                                  <pre style={{fontSize: "1.1rem"}}>{logs.join("\n")}</pre>));
+  const runButtonView$ = runnerState.map((state) => <button style={{backgroundColor: "#2d2d2d"}} onClick={toggleRunner}>{state ? "Pause" : "Run"}</button>);
+  const output = children;
+  const {keys: variables, values: refs} = objToKeyValueArrays(imports);
+  const createrRunner = (currentCode) => (output) => Function("output", ...variables, Babel.transform(currentCode, {
+    presets: [ "es2015", "react", "stage-0"]
+  }).code)(output, ...refs);
+  const output$ = code$.pausable(runnerState).map((c) => {
+    return React.cloneElement(output, {
+      runner: createrRunner(c)
+    });
+  }).startWith((<div/>));
 
-  return combineLatest(codeView$, runView$, logsView$, buildLayout(maxLines));
+  return combineLatest(codeView$, runButtonView$, output$, buildLayout(maxLines));
 };
 
 export default pure(createComponent((props$) => {

@@ -1,6 +1,7 @@
 // Import React
 import React from "react";
-import ConsoleRunner from "./helpers/ConsoleRunner";
+import ConsoleRunner from "./helpers/Runner";
+import ConsoleOutput from "./helpers/outputs/Console";
 import {Observable} from "rx";
 // Import Spectacle Core tags
 import {
@@ -126,14 +127,18 @@ export default class Presentation extends React.Component {
           <Slide transition={["zoom", "fade"]} bgColor="primary" notes="<ul><li>talk about that</li><li>and that</li></ul>">
               <div>
               <Heading size={6} textColor="secondary">Array - Collection over space (memory based)</Heading>
-              <ConsoleRunner code={require("raw!../assets/simple-collections/array.js.asset").split("###")} maxLines={7} />
+              <ConsoleRunner code={require("raw!../assets/simple-collections/array.js.asset").split("###")} maxLines={7} >
+              <ConsoleOutput/>
+              </ConsoleRunner>
               </div>
             <Appear>
               <div>
               <Heading size={6} textColor="secondary">Observable - Collection over time (event based)</Heading>
               <ConsoleRunner maxLines={7} code={require("raw!../assets/simple-collections/rx.js.asset").split("###")}
                 imports={{Observable}}
-              />
+              >
+              <ConsoleOutput/>
+              </ConsoleRunner>
               </div>
             </Appear>
           </Slide>
@@ -168,3 +173,4 @@ export default class Presentation extends React.Component {
     );
   }
 }
+
