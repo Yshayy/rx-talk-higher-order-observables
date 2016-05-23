@@ -57,8 +57,7 @@ RxComponent
 ###
 class Counter extends Component
 {
-  constructor()
-  {
+  constructor(){
     super();
     this.changes = new Subject();
     this.state = {count:0}
@@ -71,13 +70,11 @@ class Counter extends Component
     .subscribe(count=>this.setState({count}));
   }
   
-  increment()
-  {
+  increment(){
     this.changes.onNext(1)
   }
   
-  decrement()
-  {
+  decrement(){
     this.changes.onNext(-1)
   }
   
