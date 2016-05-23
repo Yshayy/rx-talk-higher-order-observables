@@ -8,36 +8,64 @@ RxComponent
 .subscribe(comp=> ReactDOM.render(comp, DOMContainer))
 ###
 let DOMContainer = getAppContainer(context)
-let actions = new Subject()
-let values = actions
-                    .scan((acc,next)=>acc + next)
+let changes = new Subject()
+let values = changes
                     .startWith(0)
+                    .scan((acc,next)=>acc + next)
                                         
 let RxComponent = values
   .map((value)=>
     (<div>
       <div>{value}</div>
-      <button onClick={()=>actions.onNext(1)}>
+      <button onClick={()=>changes.onNext(1)}>
       +</button>
-      <button onClick={()=>actions.onNext(-1)}>
+      <button onClick={()=>changes.onNext(-1)}>
       -</button>
      </div>))
 
 RxComponent
 .subscribe(comp=> ReactDOM.render(comp, DOMContainer))
+###
+let DOMContainer = getAppContainer(context)
+let changes = new Subject()
+let dispatch = (action)=> changes.onNext(action);
+let incrementAction = {type:"INCREMENT"};
+let decrementAction = {type:"DECREMENT"};
+let values = changes
+            .startWith(0)
+            .scan((state,action)=>{
+                if (action.type === "INCREMENT")
+                    return state + 1;
+                if (action.type === "DECREMENT")
+                    return state - 1;
+                return state;
+            })
+            
+let RxComponent = values
+  .map((value)=>
+    (<div>
+      <div>{value}</div>
+      <button onClick={()=>dispatch(incrementAction)}>
+      +</button>
+      <button onClick={()=>dispatch(decrementAction)}>
+      -</button>
+      <div>redux style</div>
+     </div>))
 
+RxComponent
+.subscribe(comp=> ReactDOM.render(comp, DOMContainer))
 ###
 class Counter extends Component
 {
   constructor()
   {
     super();
-    this.actions = new Subject();
+    this.changes = new Subject();
     this.state = {count:0}
   }
   
   componentDidMount(){
-    this.actions
+    this.changes
     .scan((acc,next)=>acc + next)
     .startWith(0)
     .subscribe(count=>this.setState({count}));
@@ -45,12 +73,12 @@ class Counter extends Component
   
   increment()
   {
-    this.actions.onNext(1)
+    this.changes.onNext(1)
   }
   
   decrement()
   {
-    this.actions.onNext(-1)
+    this.changes.onNext(-1)
   }
   
   render(){
