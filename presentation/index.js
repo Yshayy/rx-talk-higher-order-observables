@@ -8,6 +8,7 @@ import { createComponent, createEventHandler } from "rx-recompose";
 import ReactDOM from "react-dom";
 import "rx-dom";
 require("./helpers/inject-op-tooltips");
+require("./index.css");
 
 // Import Spectacle Core tags
 import {
@@ -67,6 +68,28 @@ const theme = createTheme({
   primary: "#555a5f",
   secondary: "white"
 });
+
+const RxImports = {Rx, Observable, Subject};
+const ReactImports = {React, ReactDOM, Component};
+const RecomposeImports = { createComponent, createEventHandler };
+const stockSources = require("raw!../assets/stocks/stocks.js.asset").split("###");
+const stocksImports = {
+  ...RxImports,
+  ...ReactImports,
+  calculateDiff(oldStock, newStock) {
+    return (oldStock && oldStock.price) && Math.round( (
+    (newStock.price - oldStock.price) / newStock.price) * 10000) * 0.01;
+  },
+  fetchStockData(symbol) {
+    const url = "http://cors.io/?u=" + encodeURIComponent(`http://finance.google.com/finance/info?client=ig&q=${symbol}`);
+    const extractPrice = (txt) => parseFloat(JSON.parse(txt.substr(3))[0].l.replace(/,/g, ""));
+    return Observable.fromPromise(() =>
+      fetch(url)
+      .then(res => res.text())
+      .then(txt => ({symbol, price:extractPrice(txt)}))
+    );
+  }
+};
 
 export default class Presentation extends React.Component {
   render() {
@@ -148,7 +171,7 @@ export default class Presentation extends React.Component {
               </div>
             </Appear>
           </Slide>
-          <Slide transition={["slide"]}  bgDarken={0.75}>
+          <Slide transition={["slide"]} bgDarken={0.75}>
             <Text size={1} textColor="secondary" >
                 If we look on Event streams as collections...
              </Text>
@@ -193,7 +216,7 @@ export default class Presentation extends React.Component {
           <Slide transition={["zoom", "fade"]} bgColor="primary">
             <Heading size={5} textColor="secondary" caps>React Example - Clock</Heading>
             <Runner maxLines={20} code={require("raw!../assets/react/clock.js.asset").split("###")}
-              imports={{React, Observable, ReactDOM,  
+              imports={{React, Observable, ReactDOM,
                 getAppContainer: ({elems: {reactClockAppContainer}}) => reactClockAppContainer
               }} >
               <DomOutput>
@@ -204,8 +227,7 @@ export default class Presentation extends React.Component {
           <Slide transition={["zoom", "fade"]} bgColor="primary">
             <Heading size={5} textColor="secondary" caps>React Example - Counter</Heading>
             <Runner maxLines={20} code={require("raw!../assets/react/counter.js.asset").split("###")}
-              imports={{React, Component, Subject,
-                Observable, ReactDOM, createComponent, createEventHandler,
+              imports={{...RxImports,...ReactImports,...RecomposeImports,
                 getAppContainer: ({elems: {reactCounterAppContainer}}) => reactCounterAppContainer
               }} >
               <DomOutput>
@@ -214,10 +236,9 @@ export default class Presentation extends React.Component {
            </Runner>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading size={5} textColor="secondary" caps>React Example - Counter</Heading>
-            <Runner maxLines={20} code={require("raw!../assets/stocks/stocks.js.asset").split("###")}
-              imports={{React, Component, Subject,
-                Observable, ReactDOM,
+            <Heading size={5} textColor="secondary" caps>React Example - Stocks</Heading>
+            <Runner maxLines={20} code={[stockSources[stockSources.length - 1], ...stockSources]}
+              imports={{...stocksImports,
                 getAppContainer: ({elems: {reactStocksAppContainer}}) => reactStocksAppContainer
               }} >
               <DomOutput>

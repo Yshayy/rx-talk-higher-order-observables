@@ -1,36 +1,117 @@
-let stockUrl = (stock) => "http://cors.io/?u=" + encodeURIComponent(`http://finance.google.com/finance/info?client=ig&q=${stock}`);
-let fetchStockData = (stock) => {
-    let url = stockUrl(stock);
-    return Observable.fromPromise(() =>
-        fetch(url).then(res => res.text())
-        .then(txt => ({stock, price:JSON.parse(txt.substr(3))[0].l})));
+function fetchStockData(symbol){
+  symbol = symbol.toUpperCase();
+  let url = stockUrl(symbol);
+  return Observable.fromPromise(() =>
+    fetch(url)
+    .then(res => res.text())
+    .then(txt => ({symbol, price:extractPrice(txt)}))
+  );
 }
+###
+function fetchLiveStockData(symbol){
+  return Observable
+    .interval(5000)
+    .startWith({})
+    .map(() => fetchStockData(symbol))
+    .switch()
+    .startWith({symbol})
+    .scan((prev,next)=>
+      ({...next, diff: calculateDiff(prev,next)})
+    )
+    .catch(()=>Observable.just({symbol,isError:true}))
+};
+###
+let userStocks = new Subject();
 
-let stocks = new Subject();
-                    
-let StockLine = ({stock,price})=> (<div>{`${stock}:${price}`}</div>)
+let userStocksState = userStocks
+  .startWith("TLV:T25")
+  .map(fetchLiveStockData)
+  .mergeAll()
+  .scan((stocks,update)=>(
+  {...stocks, [update.symbol]:update}), {}
+  )
+  .map(allStocks => Object.values(allStocks));
+###
 
-let StocksList = stocks
-                .startWith(["TLV:T25"])
-                .scan((a,b)=> ([...a,b]) )
-                .flatMap(allStocks=> {
-                    let allStocksPrices = allStocks.map(fetchStockData);
-                    return Observable.combineLatest(allStocksPrices, (...stocksPrices)=> 
-                    stocksPrices.map(({stock,price})=><StockLine stock={stock} price={price} />))
-                });
+let StockItem = ({symbol, price, isError, diff}) => {
+  let color = diff > 0 ? "green" : "red";
+  return (<div>
+    <span>{symbol}</span>
+    <span>:</span>
+    <span>{isError ? "ERR" : (price || "loading...")}</span>
+    {diff && diff !== 0 ? 
+      <span style={{color,margin:"0 10px"}}>{diff}%</span> :
+      null}
+    </div>);
+};
 
-let App = StocksList.map(stockList=>{
-    return (<div>
-        {stockList}
-        <input type="text" onKeyUp={e=>{
-            if (e.keyCode === 13)
-            {
-                stocks.onNext(e.target.value);
-                e.target.value = "";
-            }
-        }} />
-    </div>)
-})
+let StocksList = userStocksState
+  .map(stockList => 
+        stockList.map(stock => (<StockItem {...stock} />)));
 
-let DOMContainer = getAppContainer(context)
+let App = StocksList.map(stockList => {
+  return (<div>
+    {stockList}
+    <input type="text" onKeyUp={e => {
+      if (e.keyCode === 13){
+        userStocks.onNext(e.target.value.toUpperCase());
+        e.target.value = "";
+        }
+    }} />
+    </div>);
+});
+###
+let userStocks = new Subject();
+
+function fetchLiveStockData(symbol){
+  return Observable
+    .interval(5000)
+    .startWith({})
+    .map(() => fetchStockData(symbol))
+    .switch()
+    .startWith({symbol})
+    .scan((prev,next)=>(
+    {...next, diff: calculateDiff(prev,next)}
+    ))
+    .catch(e => Observable.just({symbol, isError:true}))
+};
+
+let userStocksState = userStocks
+  .startWith("TLV:T25")
+  .map(fetchLiveStockData)
+  .mergeAll()
+  .scan((stocks,update)=>(
+  {...stocks, [update.symbol]:update}), {}
+  )
+  .map(allStocks => Object.values(allStocks));
+
+let StockItem = ({symbol, price, isError, diff}) => {
+  let color = diff > 0 ? "green" : "red";
+  return (<div>
+    <span>{symbol}</span>
+    <span>:</span>
+    <span>{isError ? "ERR" : (price || "loading...")}</span>
+    {diff && diff !== 0 ? 
+      <span style={{color,margin:"0 10px"}}>{diff}%</span> :
+      null}
+    </div>);
+};
+
+let StocksList = userStocksState
+  .map(stockList => 
+        stockList.map(stock => (<StockItem {...stock} />)));
+
+let App = StocksList.map(stockList => {
+  return (<div>
+    {stockList}
+    <input type="text" onKeyUp={e => {
+      if (e.keyCode === 13){
+        userStocks.onNext(e.target.value.toUpperCase());
+        e.target.value = "";
+        }
+    }} />
+    </div>);
+});
+
+let DOMContainer = getAppContainer(context);
 App.subscribe(comp => ReactDOM.render(comp, DOMContainer));

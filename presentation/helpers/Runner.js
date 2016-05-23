@@ -52,7 +52,7 @@ const lockKeys = {
 const createEditor = (code) => {
   const {handler: updateCode, stream: codeUpdates$ } = createEventHandler();
   const {handler: refresh, stream: refreshActions$ } = createEventHandler();
-  const code$ = codeUpdates$.distinctUntilChanged().startWith(code[0]);
+  const code$ = codeUpdates$.startWith(code[0]).distinctUntilChanged();
   let currentRef = null;
   const view$ = refreshActions$.map((x, i) => i).startWith(null)
                 .withLatestFrom(code$,
@@ -60,7 +60,7 @@ const createEditor = (code) => {
                  (
                    <div>
                    <div style={{ textAlign: "left", wordBreak: "break-all"}}>{code.map((c, i) => <button key={i} style={{marginLeft: 10, backgroundColor: "#2d2d2d", fontSize: 12 }}
-                    onClick={ (e) => {updateCode(c); refresh();}} >{i + 1}</button>)}</div>
+                    onClick={ (e) => {updateCode(c);refresh();}} >{i + 1}</button>)}</div>
                    <div className="codeEditor" style={{overflowY:"auto", position:"absolute",
                    top:40,
                    left:0,
@@ -88,7 +88,8 @@ const createComponentView = ({ children, imports = {}, code, maxLines = 10}) => 
   const createrRunner = (currentCode) => (output) => Function("context", ...variables, Babel.transform(currentCode, {
     presets: [ "es2015", "react", "stage-0"]
   }).code)(output, ...refs);
-  const output$ = code$.pausable(runnerState).map((c) => {
+  const output$ = Observable.combineLatest(code$, runnerState, (c, isRunning) => {
+    if (!isRunning) {return (<div/>);}
     return React.cloneElement(output, {
       runner: createrRunner(c)
     });
