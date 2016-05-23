@@ -10,7 +10,7 @@
     - Rx Ecosystm - Short history (rx is not new, and it's been standardized) (3min)
 # Rx and ract
     - Ecosystem (Building React Component)
-    - Building twitter agent (15min)
+    - Building stocks agent (15min)
 # Closing
     - Reprise - rx can help you improve as developers 
     - Soluto use rx all along our products

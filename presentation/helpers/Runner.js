@@ -4,6 +4,7 @@ import { pure } from "recompose";
 import R from "ramda";
 import {Observable} from "rx";
 import * as Babel from "babel-standalone";
+import "./runner.css";
 
 import {
   Fit,
@@ -21,9 +22,9 @@ const objToKeyValueArrays = (o) => R.pipe(R.toPairs,
 
 const buildLayout = (maxLines) => (codeView, runButtonView, outputView) => {
   let ref = null;
-  const tryFullScreen = () => ref && ref.webkitRequestFullscreen();
+  const toggleFullScreenIn = () => ref && ref.webkitRequestFullscreen();
   return (
-  <div ref={(e) => ref = e} style={{position: "relative", width: "100%", height: "100%", backgroundColor: "#2d2d2d", margin: 10 }}>
+  <div className="runner" ref={(e) => ref = e} style={{position: "relative", width: "100%", height: "100%", backgroundColor: "#2d2d2d", margin: 10 }}>
   <div style={{display: "flex", flexDirection: "column", minHeight: maxLines * 30, height: "100%"}}>
   <Layout style={{flexGrow: 1}}>
       <Fill style={{position: "relative"}}>
@@ -36,7 +37,7 @@ const buildLayout = (maxLines) => (codeView, runButtonView, outputView) => {
   </Layout>
   </div>
   <div style={{position: "absolute", top: 10, right: 10}} >{runButtonView}</div>
-  <div style={{position: "absolute", bottom: 10, right: 10}} ><button style={{backgroundColor: "#2d2d2d"}} onClick={tryFullScreen}>[]</button></div>
+  <div style={{position: "absolute", bottom: 10, right: 10}} ><button style={{backgroundColor: "#2d2d2d"}} onClick={toggleFullScreenIn}>[]</button></div>
   </div>
 );};
 
@@ -60,7 +61,7 @@ const createEditor = (code) => {
                    <div>
                    <div style={{ textAlign: "left", wordBreak: "break-all"}}>{code.map((c, i) => <button key={i} style={{marginLeft: 10, backgroundColor: "#2d2d2d", fontSize: 12 }}
                     onClick={ (e) => {updateCode(c); refresh();}} >{i + 1}</button>)}</div>
-                   <div style={{overflowY:"auto", position:"absolute",
+                   <div className="codeEditor" style={{overflowY:"auto", position:"absolute",
                    top:40,
                    left:0,
                    right:0,
@@ -69,7 +70,7 @@ const createEditor = (code) => {
                      currentRef = e;
                    }
   } {...lockKeys} onInput={ (e) => updateCode(currentRef.textContent)} onBlur={refresh} >
-  <CodePane textSize="1.15rem" lang="jsx" source={currentCode} /></div></div>));
+  <CodePane style={{fontSize: "-"}} lang="jsx" source={currentCode} /></div></div>));
   return {
     code$,
     view$
@@ -92,6 +93,7 @@ const createComponentView = ({ children, imports = {}, code, maxLines = 10}) => 
       runner: createrRunner(c)
     });
   }).startWith((<div/>));
+
 
   return combineLatest(codeView$, runButtonView$, output$, buildLayout(maxLines));
 };

@@ -1,13 +1,4 @@
 let DOMContainer = getAppContainer(context)
-let RxComponent = Observable
-    .interval(1000)
-    .map(()=>
-        (<div>{new Date().toLocaleString()}</div>))
-
-RxComponent
-.subscribe(comp=> ReactDOM.render(comp, DOMContainer))
-###
-let DOMContainer = getAppContainer(context)
 let changes = new Subject()
 let values = changes
                     .startWith(0)

@@ -1,0 +1,12 @@
+.runner:fullscreen, .runner:-webkit-full-screen
+{
+    font-size: 1.5rem;
+}
+
+.codeEditor pre{
+    font-size: 1.2rem;
+}
+
+*:-webkit-full-screen .codeEditor pre{
+    font-size:3rem;
+}

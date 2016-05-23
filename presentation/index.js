@@ -126,10 +126,9 @@ export default class Presentation extends React.Component {
             </List>
           </Slide>
           <Slide>
-            <Heading size={4} caps textColor="secondary" textFont="primary">
-                What?
+            <Heading fit caps textColor="secondary" textFont="primary">
+                Rx is all about collections!
             </Heading>
-            <Text>Rx is all about collections!</Text>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary" notes="<ul><li>talk about that</li><li>and that</li></ul>">
               <div>
@@ -149,23 +148,23 @@ export default class Presentation extends React.Component {
               </div>
             </Appear>
           </Slide>
-          <Slide transition={["slide"]} bgDarken={0.75}>
-            <Text size={1} >
+          <Slide transition={["slide"]}  bgDarken={0.75}>
+            <Text size={1} textColor="secondary" >
                 If we look on Event streams as collections...
              </Text>
              <Appear>
-             <Text>
+             <Text textColor="secondary">
                 We can use all our collection tools and knowledge to process events which lead us to...
              </Text>
              </Appear>
              <Appear>
-             <Text caps fit>
+             <Text caps fit textColor="secondary">
                 Functional Programming!
              </Text>
              </Appear>
           </Slide>
           <Slide transition={["slide"]} bgDarken={0.75}>
-            <Text size={3} caps >
+            <Text size={2} textColor="secondary" >
                 And that's the essence of RX and reactive programming/frp.
              </Text>
           </Slide>
@@ -192,14 +191,37 @@ export default class Presentation extends React.Component {
             <Heading caps fit>Rx ecosystem in React</Heading>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading size={5} textColor="secondary" caps>React Example</Heading>
-            <Runner maxLines={20} code={require("raw!../assets/react/example.js.asset").split("###")}
-              imports={{React, Component, Subject,
-                Observable, ReactDOM, createComponent, createEventHandler,
-                getAppContainer: ({elems: {reactExampleContainer}}) => reactExampleContainer
+            <Heading size={5} textColor="secondary" caps>React Example - Clock</Heading>
+            <Runner maxLines={20} code={require("raw!../assets/react/clock.js.asset").split("###")}
+              imports={{React, Observable, ReactDOM,  
+                getAppContainer: ({elems: {reactClockAppContainer}}) => reactClockAppContainer
               }} >
               <DomOutput>
-                  <div id="reactExampleContainer" ></div>
+                  <div id="reactClockAppContainer" ></div>
+              </DomOutput>
+           </Runner>
+          </Slide>
+          <Slide transition={["zoom", "fade"]} bgColor="primary">
+            <Heading size={5} textColor="secondary" caps>React Example - Counter</Heading>
+            <Runner maxLines={20} code={require("raw!../assets/react/counter.js.asset").split("###")}
+              imports={{React, Component, Subject,
+                Observable, ReactDOM, createComponent, createEventHandler,
+                getAppContainer: ({elems: {reactCounterAppContainer}}) => reactCounterAppContainer
+              }} >
+              <DomOutput>
+                  <div id="reactCounterAppContainer" ></div>
+              </DomOutput>
+           </Runner>
+          </Slide>
+          <Slide transition={["zoom", "fade"]} bgColor="primary">
+            <Heading size={5} textColor="secondary" caps>React Example - Counter</Heading>
+            <Runner maxLines={20} code={require("raw!../assets/stocks/stocks.js.asset").split("###")}
+              imports={{React, Component, Subject,
+                Observable, ReactDOM,
+                getAppContainer: ({elems: {reactStocksAppContainer}}) => reactStocksAppContainer
+              }} >
+              <DomOutput>
+                  <div id="reactStocksAppContainer" ></div>
               </DomOutput>
            </Runner>
           </Slide>

@@ -1,0 +1,42 @@
+let stockUrl = (stock) => `http://crossorigin.me/http://finance.google.com/finance/info?client=ig&q=${stock}`;
+
+let fetchStockData = (stock) => {
+    let url = stockUrl(stock);
+    return Observable.interval(5000).flatMapLatest(()=> Observable.fromPromise(() =>
+        fetch(url).then(res => res.text())
+        .then(txt => JSON.parse(txt.substr(3))[0].l)));
+}
+
+let stocks = new Subject();
+
+let StockLine = (stock) =>
+                    fetchStockData(stock)
+                    .map(value => (<div>{`${stock}:${value}`}</div>))
+                    .catch((ex)=>(<div>{`${stock}:ERROR`}</div>))
+
+let StocksList = stocks
+                .startWith(["TLV:T25"])
+                .scan((a,b)=> ([...a,b]))
+                .flatMapLatest(list=> 
+                {
+                    let allStocksStreams = list.map(stock=>StockLine(stock));
+                    return Observable.combineLatest(
+                            ...allStocksStreams, (...stocksView)=>
+                            (<div>{stocksView}</div>) );
+                });
+
+let App = StocksList.map(stockList=>{
+    return (<div>
+        {stockList}
+        <input type="text" onKeyUp={e=>{
+            if (e.keyCode === 13)
+            {
+                stocks.onNext(e.target.value);
+                e.target.value = "";
+            }
+        }} />
+    </div>)
+})
+
+let DOMContainer = getAppContainer(context)
+App.subscribe(comp => ReactDOM.render(comp, DOMContainer));
