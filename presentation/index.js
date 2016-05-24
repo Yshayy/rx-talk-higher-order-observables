@@ -40,16 +40,6 @@ import createTheme from "spectacle/lib/themes/default";
 // Import custom component
 import Interactive from "../assets/interactive";
 
-
-const getTranslationUrl = (text) => `https://api-platform.systran.net/translation/text/translate?input=${text}&source=en&target=it&withSource=false&withAnnotations=false&backTranslation=false&encoding=utf-8&key=53db3c6e-55f4-4f0f-971c-ea17891d5d16`;
-
-const appendLine = (el, line) => el.textContent = line + "\n" + el.textContent;
-
-const translateAsync = (text) => Observable.fromPromise(
-   () => fetch(getTranslationUrl(text))
-        .then((res) => res.json())
-        .then((res) => res.outputs[0].output));
-
 // Require CSS
 require("normalize.css");
 require("spectacle/lib/themes/default/index.css");
@@ -74,6 +64,14 @@ const RxImports = {Rx, Observable, Subject};
 const ReactImports = {React, ReactDOM, Component};
 const RecomposeImports = { createComponent, createEventHandler };
 const stockSources = require("raw!../assets/stocks/stocks.js.asset").split("###");
+const translateImports = {
+  ...RxImports,
+  translateAsync: (text) => Observable.fromPromise(
+   () => fetch(getTranslationUrl(text))
+        .then((res) => res.json())
+        .then((res) => res.outputs[0].output)),
+  appendLine: (el, line) => el.textContent = line + "\n" + el.textContent
+};
 const stocksImports = {
   ...RxImports,
   ...ReactImports,
@@ -200,10 +198,7 @@ export default class Presentation extends React.Component {
           <Slide transition={["zoom", "fade"]} bgColor="primary">
             <Heading size={4} textColor="secondary" caps>Translate Example</Heading>
             <Runner maxLines={15} code={require("raw!../assets/translate/translate.js.asset").split("###")}
-              imports={{Rx, Observable,
-                getTranslationUrl,
-                translateAsync,
-                appendLine,
+              imports={{translateImports,
                 getInputElement:({elems:{translateExampleInput}}) => translateExampleInput,
                 getViewElement:({elems:{translateExampleOutput}}) => translateExampleOutput
               }} >
@@ -225,7 +220,7 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide bgColor="primary" transitionDuration={0} >
             <Heading size={2} caps>Rx timeline </Heading>
-            <List>  
+            <List>
               <ListItem>2012 - Work started on RxJava</ListItem>
               <Appear><ListItem>2014 - RxJava First Release</ListItem></Appear>
               <Appear><ListItem>2015 - Reactive Streams for Java 9</ListItem></Appear>
@@ -263,7 +258,7 @@ export default class Presentation extends React.Component {
           <Slide transition={["zoom", "fade"]} bgColor="primary">
             <Heading size={5} textColor="secondary" caps>React Example - Clock</Heading>
             <Runner maxLines={20} code={require("raw!../assets/react/clock.js.asset").split("###")}
-              imports={{React, Observable, ReactDOM,
+              imports={{...RxImports, ...ReactImports,
                 getAppContainer: ({elems: {reactClockAppContainer}}) => reactClockAppContainer
               }} >
               <DomOutput>
@@ -274,7 +269,7 @@ export default class Presentation extends React.Component {
           <Slide transition={["zoom", "fade"]} bgColor="primary">
             <Heading size={5} textColor="secondary" caps>React Example - Counter</Heading>
             <Runner maxLines={20} code={require("raw!../assets/react/counter.js.asset").split("###")}
-              imports={{...RxImports,...ReactImports,...RecomposeImports,
+              imports={{...RxImports, ...ReactImports, ...RecomposeImports,
                 getAppContainer: ({elems: {reactCounterAppContainer}}) => reactCounterAppContainer
               }} >
               <DomOutput>
@@ -298,7 +293,7 @@ export default class Presentation extends React.Component {
             <List>
               <Appear><ListItem>Things that related to time</ListItem></Appear>
               <Appear><ListItem>Realtime UI for live data</ListItem></Appear>
-              <Appear><ListItem>Complex intents - drag&drop, long presses, gestures</ListItem></Appear>
+              <Appear><ListItem>Complex user intents - drag&drop, long presses, gestures...</ListItem></Appear>
               <Appear><ListItem>Complex async processing</ListItem></Appear>
               <Appear><ListItem>Abstraction</ListItem></Appear>
             </List>
