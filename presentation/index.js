@@ -227,7 +227,7 @@ export default class Presentation extends React.Component {
             <Heading size={2} caps>Rx timeline </Heading>
             <List>
               <ListItem>2012 - Work started on RxJava</ListItem>
-              <Appear><ListItem>2014 - RxJava First Release</ListItem></Appear>
+              <Appear><ListItem>2014 - RxJava 1.0</ListItem></Appear>
               <Appear><ListItem>2015 - Reactive Streams for Java 9</ListItem></Appear>
               <Appear><ListItem>2015 - Obserable in ECMAScript (stage 1)</ListItem></Appear>
               <Appear><ListItem>2015 - RxJS is rebuilt from scratch (rxjs-5)</ListItem></Appear>
