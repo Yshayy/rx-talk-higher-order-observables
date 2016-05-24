@@ -125,6 +125,7 @@ export default class Presentation extends React.Component {
               <Appear><ListItem>Used everywhere web/mobile/backend/tools</ListItem></Appear>
               <Appear><ListItem>Helped us solve complex problems elegantly</ListItem></Appear>
               <Appear><ListItem>Changed our thinking approach to solving problems</ListItem></Appear>
+              <Appear><ListItem>Gave us alot of programming "WOW" moments</ListItem></Appear>
               <Appear><ListItem>Improved our overall adoption of FP concepts</ListItem></Appear>
             </List>
           </Slide>
@@ -304,6 +305,7 @@ export default class Presentation extends React.Component {
               <Appear><ListItem>Rx has a steep learning curve</ListItem></Appear>
               <Appear><ListItem>Rx can sometime be too smart for it's own good</ListItem></Appear>
               <Appear><ListItem>Rx require a lot of commitment for a library</ListItem></Appear>
+              <Appear><ListItem>Don't give up on Promises</ListItem></Appear>
               <Appear><ListItem>Don't settle with ugly Rx solutions</ListItem></Appear>
               <Appear><ListItem>Don't forget to dispose your subscriptions</ListItem></Appear>
             </List>
