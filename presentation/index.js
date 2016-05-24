@@ -311,8 +311,19 @@ export default class Presentation extends React.Component {
           <Slide transition={["zoom", "fade"]} bgColor="primary">
             <Heading>Soluto</Heading>
             <List>
-              <Appear><ListItem>We're hiring</ListItem></Appear>
+              <Appear><ListItem>Help people enjoy technology</ListItem></Appear>
+              <Appear><ListItem>Support, education, empowerment, insights, security</ListItem></Appear>
+              <Appear><ListItem>Run on multple platforms and devices</ListItem></Appear>
+              <Appear><ListItem>Scale of hundreds of millions</ListItem></Appear>
+              <Appear><ListItem>Organizing the first rx-israel meetup soon</ListItem></Appear>
+              <Appear><ListItem>And of course, We're hiring...</ListItem></Appear>
             </List>
+          </Slide>
+          <Slide transition={["zoom", "fade"]} bgColor="primary">
+            <Heading caps fit>Questions</Heading>
+          </Slide>
+          <Slide transition={["zoom", "fade"]} bgColor="primary">
+            <Heading caps fit>Appendix</Heading>
           </Slide>
         </Deck>
       </Spectacle>
