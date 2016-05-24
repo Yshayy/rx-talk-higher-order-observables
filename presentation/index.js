@@ -211,6 +211,15 @@ export default class Presentation extends React.Component {
                 And that's the essence of RX and reactive programming/frp.
              </Text>
           </Slide>
+          <Slide transition={["slide"]} bgDarken={0.75}>
+            <Heading caps size={2} textColor="secondary" >
+                Definitions
+             </Heading>
+             <List>
+             <ListItem>Event stream == Observable</ListItem>
+             <ListItem>Operator - function that return observable from other observable like map, filter, etc...</ListItem>
+             </List>
+          </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
             <Heading size={4} textColor="secondary" caps>Translate Example</Heading>
             <Runner maxLines={15} code={require("raw!../assets/translate/translate.js.asset").split("###")}
