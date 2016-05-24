@@ -64,6 +64,7 @@ const RxImports = {Rx, Observable, Subject};
 const ReactImports = {React, ReactDOM, Component};
 const RecomposeImports = { createComponent, createEventHandler };
 const stockSources = require("raw!../assets/stocks/stocks.js.asset").split("###");
+const getTranslationUrl = (text) => `https://api-platform.systran.net/translation/text/translate?input=${text}&source=en&target=it&withSource=false&withAnnotations=false&backTranslation=false&encoding=utf-8&key=53db3c6e-55f4-4f0f-971c-ea17891d5d16`;
 const translateImports = {
   ...RxImports,
   translateAsync: (text) => Observable.fromPromise(
@@ -75,9 +76,12 @@ const translateImports = {
 const stocksImports = {
   ...RxImports,
   ...ReactImports,
+  WHITE: "#ffffff",
+  RED: "#ff0000",
+  GREEN: "#00ff00",
   calculateDiff(oldStock, newStock) {
     return (oldStock && oldStock.price) && Math.round( (
-    (newStock.price - oldStock.price) / newStock.price) * 10000) * 0.01;
+    (newStock.price - oldStock.price) / newStock.price) * 1000000) * 0.0001;
   },
   fetchStockData(symbol) {
     const url = "http://cors.io/?u=" + encodeURIComponent(`http://finance.google.com/finance/info?client=ig&q=${symbol}`);
@@ -199,7 +203,7 @@ export default class Presentation extends React.Component {
           <Slide transition={["zoom", "fade"]} bgColor="primary">
             <Heading size={4} textColor="secondary" caps>Translate Example</Heading>
             <Runner maxLines={15} code={require("raw!../assets/translate/translate.js.asset").split("###")}
-              imports={{translateImports,
+              imports={{...translateImports,
                 getInputElement:({elems:{translateExampleInput}}) => translateExampleInput,
                 getViewElement:({elems:{translateExampleOutput}}) => translateExampleOutput
               }} >

@@ -34,14 +34,13 @@ let userStocksState = userStocks
 ###
 
 let StockItem = ({symbol, price, isError, diff}) => {
-  let color = diff > 0 ? "green" : "red";
+  let color = WHITE;
+  if (diff > 0) { color = GREEN;}
+  else if (diff < 0) { color = RED};
   return (<div>
     <span>{symbol}</span>
     <span>:</span>
-    <span>{isError ? "ERR" : (price || "loading...")}</span>
-    {diff && diff !== 0 ? 
-      <span style={{color,margin:"0 10px"}}>{diff}%</span> :
-      null}
+    <span style={{color}}>{isError ? "ERR" : (price || "loading...")}</span>
     </div>);
 };
 
@@ -52,7 +51,7 @@ let StocksList = userStocksState
 let App = StocksList.map(stockList => {
   return (<div>
     {stockList}
-    <input type="text" onKeyUp={e => {
+    <input placeholder="enter stock symbol" type="text" onKeyUp={e => {
       if (e.keyCode === 13){
         userStocks.onNext(e.target.value.toUpperCase());
         e.target.value = "";
@@ -86,14 +85,13 @@ let userStocksState = userStocks
   .map(allStocks => Object.values(allStocks));
 
 let StockItem = ({symbol, price, isError, diff}) => {
-  let color = diff > 0 ? "green" : "red";
+  let color = WHITE;
+  if (diff > 0) { color = GREEN;}
+  else if (diff < 0) { color = RED};
   return (<div>
     <span>{symbol}</span>
     <span>:</span>
-    <span>{isError ? "ERR" : (price || "loading...")}</span>
-    {diff && diff !== 0 ? 
-      <span style={{color,margin:"0 10px"}}>{diff}%</span> :
-      null}
+    <span style={{color}}>{isError ? "ERR" : (price || "loading...")}</span>
     </div>);
 };
 
@@ -104,7 +102,7 @@ let StocksList = userStocksState
 let App = StocksList.map(stockList => {
   return (<div>
     {stockList}
-    <input type="text" onKeyUp={e => {
+    <input placeholder="enter stock symbol" type="text" onKeyUp={e => {
       if (e.keyCode === 13){
         userStocks.onNext(e.target.value.toUpperCase());
         e.target.value = "";

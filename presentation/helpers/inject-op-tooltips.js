@@ -15,25 +15,31 @@ const createToolTip = (id) => {
 };
 
 const rxImages =
-["map", "mergeAll", "startWith", "debounce", "merge", "combineLatest", "scan", "filter", "switch", "distinctUntilChanged", "flatMap"].reduce((acc, op) => ({[op]: `http://reactivex.io/documentation/operators/images/${op}.png`, ...acc } ), {});
+["map", "mergeAll", "interval", "Catch", "just", "startWith", "debounce", "merge", "combineLatest", "scan", "filter", "switch", "distinctUntilChanged", "flatMap"].reduce((acc, op) => ({[op.toLowerCase()]: `http://reactivex.io/documentation/operators/images/${op}.png`, ...acc } ), {});
 
-Rx.Observable.fromEvent(document.body, "mouseover")
+Rx.Observable.fromEvent(document.body, "mousemove")
              .distinctUntilChanged(e => e.target)
              .debounce(400)
              .filter(e => !Array.from($(e.target).parents()).some(x => x.id === "op-tooltip"))
              .flatMapLatest(e => Observable.just(e.target)
                   .filter(el => el.classList.contains("token"))
                   .map(el => el.textContent)
+                  .map(op => op && op.toLowerCase())
                   .filter(op => op && rxImages[op])
                   .flatMap(op => Observable.using(() => createToolTip("op-tooltip"), tip => {
+                    console.log("creating tooltip");
                     const el = tip.getValue();
-                    const rect = e.target.getBoundingClientRect();
+                    //const {top} = e.target.getBoundingClientRect();
+                    const $target = $(e.target);
+                    const top = $target.position().top + (($target.offset().top - $target.position().top) / 2) + ($target.outerHeight() * 1.5);
+                    console.log(top);
+                    el.style.top = (top) + "px"; 
+                    
+                    $(el).appendTo(e.target);
+                    
                     $("<img/>").attr("src", rxImages[op])
-                               .height(300)
+                               .width(400)
                                .appendTo(el);
-
-                    el.style.top = (rect.top - 320) + "px";
-                    el.style.left = rect.left + "px";
 
                     return Observable.never();
                   })))
