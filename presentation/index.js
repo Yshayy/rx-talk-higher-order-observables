@@ -123,6 +123,16 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
             <Heading size={2} caps textColor="secondary" textFont="primary">
+              About me
+            </Heading>
+            <List>
+              <ListItem>Developer at Soluto</ListItem>
+              <Appear><ListItem>Enthusiastic Rx user for ~3 years</ListItem></Appear>
+              <Appear><ListItem>Architecture, design, programming languages and building stuff</ListItem></Appear>
+            </List>
+          </Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
               Rx in Soluto
             </Heading>
             <List>
@@ -270,6 +280,12 @@ export default class Presentation extends React.Component {
                   <div id="reactClockAppContainer" ></div>
               </DomOutput>
            </Runner>
+          </Slide>
+          <Slide transition={["zoom", "fade"]} bgColor="primary">
+            <Heading size={5} textColor="secondary" caps>Scan operator</Heading>
+            <Runner imports={{Observable}} code={require("raw!../assets/scan/scan.js.asset").split("###")} maxLines={8} >
+              <ConsoleOutput/>
+              </Runner>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
             <Heading size={5} textColor="secondary" caps>React Example - Counter</Heading>

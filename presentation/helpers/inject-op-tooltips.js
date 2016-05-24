@@ -15,7 +15,7 @@ const createToolTip = (id) => {
 };
 
 const rxImages =
-["map", "mergeAll", "interval", "Catch", "just", "startWith", "debounce", "merge", "combineLatest", "scan", "filter", "switch", "distinctUntilChanged", "flatMap"].reduce((acc, op) => ({[op.toLowerCase()]: `http://reactivex.io/documentation/operators/images/${op}.png`, ...acc } ), {});
+["map", "mergeAll", "interval", "Catch", "take", "just", "startWith", "debounce", "merge", "combineLatest", "scan", "reduce", "filter", "switch", "distinctUntilChanged", "flatMap"].reduce((acc, op) => ({[op.toLowerCase()]: `http://reactivex.io/documentation/operators/images/${op}.png`, ...acc } ), {});
 
 Rx.Observable.fromEvent(document.body, "mousemove")
              .distinctUntilChanged(e => e.target)
@@ -29,13 +29,14 @@ Rx.Observable.fromEvent(document.body, "mousemove")
                   .flatMap(op => Observable.using(() => createToolTip("op-tooltip"), tip => {
                     console.log("creating tooltip");
                     const el = tip.getValue();
-                    //const {top} = e.target.getBoundingClientRect();
-                    const $target = $(e.target);
-                    const top = $target.position().top + (($target.offset().top - $target.position().top) / 2) + ($target.outerHeight() * 1.5);
-                    console.log(top);
-                    el.style.top = (top) + "px"; 
-                    
-                    $(el).appendTo(e.target);
+                    const {top, left} = e.target.getBoundingClientRect();
+
+                    el.style.top = top + $(e.target).height() * 1.5 + "px";
+                    el.style.left = left + "px";
+                    console.log($(e.target).closest(".runner").width());
+                    if ($(e.target).closest(".runner").width() === document.body.offsetWidth){ 
+                      $(el).appendTo(e.target);
+                    }
                     
                     $("<img/>").attr("src", rxImages[op])
                                .width(400)
