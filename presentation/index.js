@@ -106,7 +106,7 @@ export default class Presentation extends React.Component {
             <Heading size={1} fit caps textColor="rx">
                With Rx and react
             </Heading>
-            <Link href="https://github.com/FormidableLabs/spectacle">
+            <Link href="https://github.com/Yshayy/rx-react-meetup">
               <Text bold caps textColor="tertiary">View on Github</Text>
             </Link>
             <Text textColor="secondary" textSize="1.5em" margin="20px 0px 0px" bold>yshay@soluto.com</Text>
