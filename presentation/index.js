@@ -312,7 +312,7 @@ export default class Presentation extends React.Component {
             <Heading>Soluto</Heading>
             <List>
               <Appear><ListItem>Help people enjoy technology</ListItem></Appear>
-              <Appear><ListItem>Support, education, empowerment, insights, security</ListItem></Appear>
+              <Appear><ListItem>Support, knowledge, education, empowerment, insights, security</ListItem></Appear>
               <Appear><ListItem>Run on multple platforms and devices</ListItem></Appear>
               <Appear><ListItem>Scale of hundreds of millions</ListItem></Appear>
               <Appear><ListItem>Organizing the first rx-israel meetup soon</ListItem></Appear>
