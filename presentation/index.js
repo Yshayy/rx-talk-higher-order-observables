@@ -216,33 +216,38 @@ export default class Presentation extends React.Component {
           <Slide transition={["zoom", "fade"]} bgColor="primary">
             <Heading caps>Rx timeline</Heading>
             <List>
-              <ListItem>Started at MS Cloud team somewhere at 2007</ListItem>
+              <ListItem>2007 - Rx is born based on dualizing Iterable/Iterator interfaces</ListItem>
               <Appear><ListItem>2009 - Rx.Net Released </ListItem></Appear>
-              <Appear><ListItem>2010(?) - RxJs</ListItem></Appear>
-              <Appear><ListItem>IObserable & IObserver are standardized in .net 4</ListItem></Appear>
+              <Appear><ListItem>2010 - RxJs</ListItem></Appear>
+              <Appear><ListItem>2010 - IObserable & IObserver are standardized in .net 4</ListItem></Appear>
               <Appear><ListItem>2012 - Rx get open-sourced</ListItem></Appear>
             </List>
           </Slide>
           <Slide bgColor="primary" transitionDuration={0} >
-            <Heading caps>Rx timeline</Heading>
+            <Heading size={2} caps>Rx timeline </Heading>
             <List>  
               <ListItem>2012 - Work started on RxJava</ListItem>
               <Appear><ListItem>2014 - RxJava First Release</ListItem></Appear>
               <Appear><ListItem>2015 - Reactive Streams for Java 9</ListItem></Appear>
               <Appear><ListItem>2015 - Obserable in ECMAScript (stage 1)</ListItem></Appear>
+              <Appear><ListItem>2015 - RxJS is rebuilt from scratch (rxjs-5)</ListItem></Appear>
             </List>
           </Slide>
           <Slide bgColor="primary" transitionDuration={0} >
-            <Heading caps>Rx timeline</Heading>
+            <Heading size={2} caps>Rx timeline </Heading>
             <List>
               <ListItem>Ports in many languages from ruby to c++</ListItem>
               <Appear><ListItem>Ports in many platforms</ListItem></Appear>
               <Appear><ListItem>Many clones/heavily inspired libs especially in js world</ListItem></Appear>
-              <Appear><ListItem>bacon.js, highland.js, most.js, xtream.js</ListItem></Appear>
+              <Appear><ListItem>bacon.js, kefir.js, highland.js, most.js, xtream.js</ListItem></Appear>
             </List>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading caps fit>Rx is a bit trending but it's hardly new</Heading>
+            <Heading size={2} caps>Rx timeline</Heading>
+            <List>
+              <ListItem>Rx is a bit trending now but it's hardly new</ListItem>
+              <Appear><ListItem>Expect Observables to be everywhere in js future</ListItem></Appear>
+            </List>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
             <Heading caps fit>Rx ecosystem in React</Heading>
@@ -304,6 +309,7 @@ export default class Presentation extends React.Component {
               <Appear><ListItem>Rx has a steep learning curve</ListItem></Appear>
               <Appear><ListItem>Rx can sometime be too smart for it's own good</ListItem></Appear>
               <Appear><ListItem>Rx require a lot of commitment for a library</ListItem></Appear>
+              <Appear><ListItem>Don't settle with ugly Rx solutions</ListItem></Appear>
               <Appear><ListItem>Don't forget to dispose your subscriptions</ListItem></Appear>
             </List>
           </Slide>
