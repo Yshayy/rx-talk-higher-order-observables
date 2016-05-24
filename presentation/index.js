@@ -126,9 +126,10 @@ export default class Presentation extends React.Component {
               About me
             </Heading>
             <List>
-              <ListItem>Developer at Soluto</ListItem>
+              <ListItem>Tech lead at Soluto</ListItem>
               <Appear><ListItem>Enthusiastic Rx user for ~3 years</ListItem></Appear>
               <Appear><ListItem>Architecture, design, programming languages and building stuff</ListItem></Appear>
+              <Appear><ListItem>Currently playing Uncharted 4: A Thief's End</ListItem></Appear>
             </List>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
