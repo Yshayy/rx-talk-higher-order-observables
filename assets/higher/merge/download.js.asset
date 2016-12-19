@@ -1,0 +1,11 @@
+var sites = getListOfSitesToDownload();
+
+sites
+    .map(x=> download(x))
+    .merge()
+    .subscribe(x=>context.log(`downloaded site: ${x.length}`))
+###
+sites
+    .map(x=> download(x))
+    .merge(3)
+    .subscribe(x=>context.log(`downloaded site: ${x.length}`))

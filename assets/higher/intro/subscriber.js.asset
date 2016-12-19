@@ -1,0 +1,24 @@
+let {startButton, counterView} = context.elems;
+let i=0;
+Rx.DOM
+   .click(startButton)
+   .subscribe(x=>{
+        counterView.textContent = i++;
+   })
+###
+let {counterView} = context.elems;
+
+Observable.interval(1000).take(5)
+      .subscribe(i =>{
+          counterView.textContent = i;
+      });
+###
+let {startButton, counterView} = context.elems;
+
+Rx.DOM.click(startButton)
+      .map(()=> Observable.interval(1000).take(5))
+      .subscribe(counter=>{
+          counter.subscribe(i=>{
+              counterView.textContent = i;
+          })
+      });

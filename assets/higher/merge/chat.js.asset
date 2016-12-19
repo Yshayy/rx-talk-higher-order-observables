@@ -1,0 +1,12 @@
+
+let chatView = context.elems;
+let villans = Observable.of(["Dr. evil",
+               "Darth Vader",
+               "Loki",
+                "Voldermort"]);
+
+villans.map(x=> listen(x))
+       .merge()
+       .subscribe(line=>{
+           chatView.appendLine(line)
+       })

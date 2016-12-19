@@ -45,10 +45,7 @@ require("normalize.css");
 require("spectacle/lib/themes/default/index.css");
 
 const images = {
-  city: require("../assets/city.jpg"),
-  kat: require("../assets/kat.png"),
-  logo: require("../assets/formidable-logo.svg"),
-  markdown: require("../assets/markdown.png")
+  city: require("../assets/city.jpg")
 };
 
 preloader(images);
@@ -63,36 +60,6 @@ const theme = createTheme({
 const RxImports = {Rx, Observable, Subject};
 const ReactImports = {React, ReactDOM, Component};
 const RecomposeImports = { createComponent, createEventHandler };
-const stockSources = require("raw!../assets/stocks/stocks.js.asset").split("###");
-const getTranslationUrl = (text) => `https://api-platform.systran.net/translation/text/translate?input=${text}&source=en&target=it&withSource=false&withAnnotations=false&backTranslation=false&encoding=utf-8&key=53db3c6e-55f4-4f0f-971c-ea17891d5d16`;
-const translateImports = {
-  ...RxImports,
-  translateAsync: (text) => Observable.fromPromise(
-   () => fetch(getTranslationUrl(text))
-        .then((res) => res.json())
-        .then((res) => res.outputs[0].output)),
-  appendLine: (el, line) => el.textContent = line + "\n" + el.textContent
-};
-const stocksImports = {
-  ...RxImports,
-  ...ReactImports,
-  WHITE: "#ffffff",
-  RED: "#ff0000",
-  GREEN: "#00ff00",
-  calculateDiff(oldStock, newStock) {
-    return (oldStock && oldStock.price) && Math.round( (
-    (newStock.price - oldStock.price) / newStock.price) * 1000000) * 0.0001;
-  },
-  fetchStockData(symbol) {
-    const url = "http://cors.io/?u=" + encodeURIComponent(`http://finance.google.com/finance/info?client=ig&q=${symbol}`);
-    const extractPrice = (txt) => parseFloat(JSON.parse(txt.substr(3))[0].l.replace(/,/g, ""));
-    return Observable.fromPromise(() =>
-      fetch(url)
-      .then(res => res.text())
-      .then(txt => ({symbol, price:extractPrice(txt)}))
-    );
-  }
-};
 
 export default class Presentation extends React.Component {
   render() {
@@ -101,10 +68,10 @@ export default class Presentation extends React.Component {
         <Deck transition={["zoom", "slide"]} transitionDuration={500}>
           <Slide transition={["zoom"]} bgColor="background" >
             <Heading size={1} fit caps lineHeight={1} textColor="rx">
-              Reactive UI
+              The mysteries of
             </Heading>
             <Heading size={1} fit caps textColor="rx">
-               With Rx and react
+               Observables of Observables
             </Heading>
             <Link href="https://github.com/Yshayy/rx-react-meetup">
               <Text bold caps textColor="tertiary">View on Github</Text>
@@ -113,84 +80,215 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
             <Heading size={2} caps textColor="secondary" textFont="primary">
+              About me
+            </Heading>
+            <List>
+              <ListItem>Tech lead at Soluto</ListItem>
+              <Appear><ListItem>Enthusiastic Rx user for ~4 years</ListItem></Appear>
+              <Appear><ListItem>Coding, System Architecture, Programming languages, API design</ListItem></Appear>
+            </List>
+          </Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              Why
+            </Heading>
+            <List>
+              <ListItem>Observables of observable can be diffcult to grasp</ListItem>
+              <Appear><ListItem>Flattening an observable is a common operation</ListItem></Appear>
+              <Appear><ListItem>Flatmap is not enough</ListItem></Appear>
+              <Appear><ListItem>💡 There's an operator for that</ListItem></Appear>
+            </List>
+          </Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
               Agenda
             </Heading>
             <List>
-              <ListItem>Introduction to Rx</ListItem>
-              <ListItem>Building React UI</ListItem>
+              <ListItem>Intro</ListItem>
+              <ListItem>Flattening operator</ListItem>
               <Appear><ListItem>All the code is available online</ListItem></Appear>
             </List>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
             <Heading size={2} caps textColor="secondary" textFont="primary">
-              About me
+              Example - Counter
+            </Heading>
+            <Runner maxLines={15} code={require("raw!../assets/higher/intro/subscriber.js.asset").split("###")}
+              imports={{...RxImports}} >
+              <DomOutput>
+                  <button id="startButton" >Start</button>
+                  <div id="counterView"></div>
+              </DomOutput>
+            </Runner>
+          </Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              Why it's bad
             </Heading>
             <List>
-              <ListItem>Tech lead at Soluto</ListItem>
-              <Appear><ListItem>Enthusiastic Rx user for ~3 years</ListItem></Appear>
-              <Appear><ListItem>Architecture, design, programming languages and building stuff</ListItem></Appear>
-              <Appear><ListItem>Currently playing Uncharted 4: A Thief's End</ListItem></Appear>
+              <ListItem>Callback hell</ListItem>
+              <ListItem>Not disposable</ListItem>
+              </List>
+          </Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              Again with flatMap
+            </Heading>
+            <Runner maxLines={15} code={require("raw!../assets/higher/intro/flatmap.js.asset").split("###")}
+              imports={{...RxImports}} >
+              <DomOutput>
+                  <button id="startButton" >Start</button>
+                  <div id="counterView"></div>
+              </DomOutput>
+            </Runner>
+          </Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              flatMap
+            </Heading>
+            <Appear><ListItem>Common concept (bind)</ListItem></Appear>
+            <Appear>
+            <Markdown>
+                 Obserable[T]  
+                 flatMap[(f: (t:T) => Obserable[U]):Obserable[U]
+            </Markdown>
+            </Appear>
+          </Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              flatMap
+            </Heading>
+            <List>
+            <Appear><ListItem>Two operations</ListItem></Appear>
+            <Appear><ListItem>Map</ListItem></Appear>
+            <Appear><ListItem>Merge</ListItem></Appear>
             </List>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
             <Heading size={2} caps textColor="secondary" textFont="primary">
-              Rx in Soluto
+              flatMap
             </Heading>
+            <Runner maxLines={15} code={require("raw!../assets/higher/intro/mergemap.js.asset").split("###")}
+              imports={{...RxImports}} >
+              <DomOutput>
+                  <button id="startButton" >Start</button>
+                  <div id="counterView"></div>
+              </DomOutput>
+            </Runner>
             <List>
-              <Appear><ListItem>Used everywhere web/mobile/backend/tools</ListItem></Appear>
-              <Appear><ListItem>Helped us solve complex problems elegantly</ListItem></Appear>
-              <Appear><ListItem>Changed our thinking approach to solving problems</ListItem></Appear>
-              <Appear><ListItem>Gave us alot of programming "WOW" moments</ListItem></Appear>
-              <Appear><ListItem>Improved our overall adoption of FP concepts</ListItem></Appear>
+            <ListItem>Merge is just one strategy to flat an observable</ListItem>
+            <Appear><ListItem>Rx got dedicated operators for handling High-order observable</ListItem></Appear>
+            <Appear><ListItem>Higher-order observable - observable of observable</ListItem></Appear>
             </List>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
-            <Heading size={4} caps fit textColor="secondary" textFont="primary">
-              Let's start with Rx!
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              Flattening operators - Lets's start
             </Heading>
           </Slide>
-          <Slide>
-          <Heading size={4} caps textColor="secondary" textFont="primary">
-              What?
-          </Heading>
-          <iframe src="http://reactivex.io/" style={{width: "100%", height: 600}} />
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              Merge
+            </Heading>
+            <Heading size={4}>mergeAll, flatMap, mergeMap</Heading>
+            <Runner maxLines={15} code={require("raw!../assets/higher/merge/counter.js.asset").split("###")}
+              imports={{...RxImports}} >
+              <DomOutput>
+                  <button id="startButton" >Start</button>
+                  <div id="counterView"></div>
+              </DomOutput>
+            </Runner>
           </Slide>
-          <Slide>
-          <Heading size={4} caps textColor="secondary" textFont="primary">
-              What?
-          </Heading>
-          <List>
-            <ListItem>"An API for asynchronous programming with observable streams" (reactivex.io)</ListItem>
-            <Appear><ListItem>??</ListItem></Appear>
-            <Appear><ListItem>"Rx is a combination of the best ideas from the Observer pattern, the Iterator pattern, and functional programming"
-            (reactivex.io)
-            </ListItem></Appear>
-            <Appear><ListItem>????</ListItem></Appear>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              Merge
+            </Heading>
+            <List>
+            <ListItem>Multiple concurrent streams</ListItem>
+            <Appear><ListItem>Ordering is lost</ListItem></Appear>
             </List>
           </Slide>
-          <Slide>
-            <Heading fit caps textColor="secondary" textFont="primary">
-                Rx is all about collections!
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              Merge
             </Heading>
+            <Runner maxLines={15} code={require("raw!../assets/higher/merge/chat.js.asset").split("###")}
+              imports={{...RxImports}} >
+              <DomOutput>
+                  <div id="chatView"></div>
+              </DomOutput>
+            </Runner>
           </Slide>
-          <Slide transition={["zoom", "fade"]} bgColor="primary" notes="<ul><li>talk about that</li><li>and that</li></ul>">
-              <div>
-              <Heading size={6} textColor="secondary">Array - Collection over space (memory based)</Heading>
-              <Runner code={require("raw!../assets/simple-collections/array.js.asset").split("###")} maxLines={8} >
-              <ConsoleOutput/>
-              </Runner>
-              </div>
-            <Appear>
-              <div>
-              <Heading size={6} textColor="secondary">Observable - Collection over time (event based)</Heading>
-              <Runner maxLines={8} code={require("raw!../assets/simple-collections/rx.js.asset").split("###")}
-                imports={{Observable}}
-              >
-              <ConsoleOutput/>
-              </Runner>
-              </div>
-            </Appear>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              Merge with concurrency limiting
+            </Heading>
+            <Runner maxLines={15} code={require("raw!../assets/higher/merge/download.js.asset").split("###")}
+              imports={{...RxImports}} >
+              <ConsoleOutput>
+              </ConsoleOutput>
+            </Runner>
           </Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              Concat
+            </Heading>
+            <Heading size={4}>Same as merge(1)</Heading>
+          </Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              Concat
+            </Heading>
+            <Heading size={4}>concatAll, concatMap</Heading>
+            <Runner maxLines={15} code={require("raw!../assets/higher/concat/counter.js.asset").split("###")}
+              imports={{...RxImports}} >
+              <DomOutput>
+                  <button id="startButton" >Start</button>
+                  <div id="counterView"></div>
+              </DomOutput>
+            </Runner>
+          </Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              Concat
+            </Heading>
+            <List>
+            <ListItem>Only one active stream</ListItem>
+            <Appear><ListItem>Ordering is perserved</ListItem></Appear>
+            </List>
+          </Slide>
+          <Silde>
+          <Heading size={2}>Other worth mentioning</Heading>
+          <List>
+            <ListItem>combineAll</ListItem>
+            <Appear><ListItem>forkJoin</ListItem></Appear>
+            <Appear><ListItem>race</ListItem></Appear>
+          </List>
+          </Slide>
+          <Silde>
+          <Heading size={2}>Creating Higher order observables</Heading>
+          <List>
+            <ListItem>map</ListItem>
+            <Appear><ListItem>groupBy</ListItem></Appear>
+            <Appear><ListItem>window</ListItem></Appear>
+          </List>
+          </Slide>
+          <Slide>
+          <Heading size={2}>Summary</Heading>
+          <List>
+            <ListItem>Higher order Observables are everywhere
+            <Appear><ListItem>Flattening Observables is must for using Observables everywhere</ListItem></Appear>
+            <Appear><ListItem>Flattening Observables comes with different flavours</ListItem></Appear>
+            <Appear><ListItem>Think about the right one the next time you use flatMap</ListItem></Appear>
+          </List>
+          </Slide>
+          <Slide>
+            <Heading size={1}>Questions</Heading>
+          </Slide>
+
+
+
+
           <Slide transition={["slide"]} bgDarken={0.75}>
             <Text size={1} textColor="secondary" >
                 If we look on Event streams as collections...
@@ -223,7 +321,7 @@ export default class Presentation extends React.Component {
           <Slide transition={["zoom", "fade"]} bgColor="primary">
             <Heading size={4} textColor="secondary" caps>Translate Example</Heading>
             <Runner maxLines={15} code={require("raw!../assets/translate/translate.js.asset").split("###")}
-              imports={{...translateImports,
+              imports={{
                 getInputElement:({elems:{translateExampleInput}}) => translateExampleInput,
                 getViewElement:({elems:{translateExampleOutput}}) => translateExampleOutput
               }} >
@@ -305,17 +403,6 @@ export default class Presentation extends React.Component {
               }} >
               <DomOutput>
                   <div id="reactCounterAppContainer" ></div>
-              </DomOutput>
-           </Runner>
-          </Slide>
-          <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading size={5} textColor="secondary" caps>React Example - Stocks</Heading>
-            <Runner maxLines={20} code={[stockSources[stockSources.length - 1], ...stockSources]}
-              imports={{...stocksImports,
-                getAppContainer: ({elems: {reactStocksAppContainer}}) => reactStocksAppContainer
-              }} >
-              <DomOutput>
-                  <div id="reactStocksAppContainer" ></div>
               </DomOutput>
            </Runner>
           </Slide>
