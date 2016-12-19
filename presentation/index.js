@@ -7,7 +7,6 @@ import Rx, {Observable, Subject} from "rx";
 import { createComponent, createEventHandler } from "rx-recompose";
 import ReactDOM from "react-dom";
 import "rx-dom";
-require("./helpers/inject-op-tooltips");
 require("./index.css");
 Observable.prototype.exhaust = Observable.prototype.switchFirst;
 Observable.prototype.exhaustMap = Observable.prototype.flatMapFirst;
@@ -55,8 +54,6 @@ const images = {
 
 preloader(images);
 
-console.log(images);
-
 const theme = createTheme({
   background: "#555a5f",
   primary: "#555a5f",
@@ -80,7 +77,7 @@ export default class Presentation extends React.Component {
             <Heading size={1} fit caps textColor="rx">
                Observables of Observables
             </Heading>
-            <Link href="https://github.com/Yshayy/rx-react-meetup">
+            <Link href="https://github.com/Yshayy/rx-talk-higher-order-observables">
               <Text bold caps textColor="tertiary">View on Github</Text>
             </Link>
             <Text textColor="secondary" textSize="1.5em" margin="20px 0px 0px" bold>yshay@soluto.com</Text>
