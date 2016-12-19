@@ -105,7 +105,7 @@ export default class Presentation extends React.Component {
             </Heading>
             <List>
               <ListItem>Intro</ListItem>
-              <ListItem>Flattening operator</ListItem>
+              <Appear><ListItem>Flattening operator</ListItem></Appear>
               <Appear><ListItem>All the code is available online</ListItem></Appear>
             </List>
           </Slide>
@@ -127,7 +127,7 @@ export default class Presentation extends React.Component {
             </Heading>
             <List>
               <ListItem>Callback hell</ListItem>
-              <ListItem>Not disposable</ListItem>
+              <Appear><ListItem>Not disposable</ListItem></Appear>
               </List>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
