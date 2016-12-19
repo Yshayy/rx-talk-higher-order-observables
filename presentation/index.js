@@ -257,7 +257,7 @@ export default class Presentation extends React.Component {
             <Appear><ListItem>Ordering is perserved</ListItem></Appear>
             </List>
           </Slide>
-          <Silde>
+          <Slide>
           <Heading size={2}>Other worth mentioning</Heading>
           <List>
             <ListItem>combineAll</ListItem>
@@ -265,7 +265,7 @@ export default class Presentation extends React.Component {
             <Appear><ListItem>race</ListItem></Appear>
           </List>
           </Slide>
-          <Silde>
+          <Slide>
           <Heading size={2}>Creating Higher order observables</Heading>
           <List>
             <ListItem>map</ListItem>
@@ -276,7 +276,7 @@ export default class Presentation extends React.Component {
           <Slide>
           <Heading size={2}>Summary</Heading>
           <List>
-            <ListItem>Higher order Observables are everywhere
+            <ListItem>Higher order Observables are everywhere</ListItem>
             <Appear><ListItem>Flattening Observables is must for using Observables everywhere</ListItem></Appear>
             <Appear><ListItem>Flattening Observables comes with different flavours</ListItem></Appear>
             <Appear><ListItem>Think about the right one the next time you use flatMap</ListItem></Appear>

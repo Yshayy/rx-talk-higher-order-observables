@@ -2,14 +2,13 @@ let {startButton, counterView} = context.elems;
 
 Rx.DOM.click(startButton)
       .map(()=> Observable.interval(1000).take(5))
-      .concat()
+      .switch()
       .subscribe(i=>{
               counterView.textContent = i;
       });
-
 ###
 Rx.DOM.click(startButton)
-      .concatMap(()=> Observable.interval(1000).take(5))
+      .switchMap(()=> Observable.interval(1000).take(5))
       .subscribe(i=>{
               counterView.textContent = i;
       });

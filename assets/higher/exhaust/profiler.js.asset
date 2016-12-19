@@ -1,0 +1,5 @@
+var errorLogs = [];
+
+errorLogs
+  .exhaustMap(()=> profile())
+  .subscribe((p)=> write(p))
