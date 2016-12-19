@@ -30,6 +30,6 @@ export default createComponent((props$) => (props$.flatMapLatest(({runner}) =>
   .startWith([])
   )
   .startWith([])
-  .map((logs) => (<pre style={{fontSize: "1.1rem"}}>{logs.join("\n")}</pre>))
+  .map((logs) => (<pre style={{maxHeight:400, overflowY: "auto",fontSize: "1.1rem"}}>{logs.join("\n")}</pre>))
 ));
 

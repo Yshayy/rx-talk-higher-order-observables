@@ -1,11 +1,15 @@
-var sites = getListOfSitesToDownload();
+let sites = getListOfSitesToDownload();
 
 sites
-    .map(x=> download(x))
-    .merge()
-    .subscribe(x=>context.log(`downloaded site: ${x.length}`))
+    .map(site => download(context, site))
+    .mergeAll()
+    .subscribe(x=>
+    context.log(`downloaded site: ${x.length}`))
 ###
+let sites = getListOfSitesToDownload();
+
 sites
-    .map(x=> download(x))
+    .map(site => download(context, site))
     .merge(3)
-    .subscribe(x=>context.log(`downloaded site: ${x.length}`))
+    .subscribe(x=> 
+    context.log(`downloaded site: ${x.length}`))

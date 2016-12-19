@@ -7,6 +7,12 @@
     font-size: 1.5rem;
 }
 
+.domoutput{
+    max-height:400px;
+    overflow-y: auto;
+    font-size: 1.5rem;
+}
+
 .domoutput button{
     background-color:#2d2d2d;
 }

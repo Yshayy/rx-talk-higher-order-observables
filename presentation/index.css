@@ -1,0 +1,7 @@
+#startButton{
+   transition: all 1s;
+}
+
+#startButton:active{
+    background-color:palegreen
+}

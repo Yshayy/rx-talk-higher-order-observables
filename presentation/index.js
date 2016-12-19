@@ -131,7 +131,7 @@ export default class Presentation extends React.Component {
               </List>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
-            <Heading size={2} caps textColor="secondary" textFont="primary">
+            <Heading size={2} textColor="secondary" textFont="primary">
               Again with flatMap
             </Heading>
             <Runner maxLines={15} code={require("raw!../assets/higher/intro/flatmap.js.asset").split("###")}
@@ -143,12 +143,13 @@ export default class Presentation extends React.Component {
             </Runner>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
-            <Heading size={2} caps textColor="secondary" textFont="primary">
+            <Heading size={2} textColor="secondary" textFont="primary">
               flatMap
             </Heading>
             <List>
             <Appear><ListItem>Common concept (bind)</ListItem></Appear>
             <Appear><ListItem>Appears in other types - optionals, tasks, lists</ListItem></Appear>
+            <Appear><ListItem>Used for chaining</ListItem></Appear>
             <Appear>
             <pre >
                  {`Observable<T>{\nflatMap<U>(f: (t:T) => Observable<U>):Observable<U>\n}
@@ -158,8 +159,8 @@ export default class Presentation extends React.Component {
             </List>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
-            <Heading size={2} caps textColor="secondary" textFont="primary">
-              flatMap
+            <Heading size={2} textColor="secondary" textFont="primary">
+              flatMap (Rx)
             </Heading>
             <List>
             <Appear><ListItem>Two operations</ListItem></Appear>
@@ -168,7 +169,7 @@ export default class Presentation extends React.Component {
             </List>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
-            <Heading size={2} caps textColor="secondary" textFont="primary">
+            <Heading size={2} textColor="secondary" textFont="primary">
               flatMap
             </Heading>
             <Runner maxLines={15} code={require("raw!../assets/higher/intro/mergemap.js.asset").split("###")}
@@ -180,7 +181,7 @@ export default class Presentation extends React.Component {
             </Runner>
             </Slide>
          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
-            <Heading size={2} caps textColor="secondary" textFont="primary">
+            <Heading size={2} textColor="secondary" textFont="primary">
               flatMap
             </Heading>
             <List>
@@ -198,7 +199,7 @@ export default class Presentation extends React.Component {
             <Heading size={2} caps textColor="secondary" textFont="primary">
               Merge
             </Heading>
-            <Heading size={4}>mergeAll, flatMap, mergeMap</Heading>
+            <Heading size={6} textColor="secondary">mergeAll/flatMap/mergeMap/selectMany</Heading>
             <Runner maxLines={15} code={require("raw!../assets/higher/merge/counter.js.asset").split("###")}
               imports={{...RxImports}} >
               <DomOutput>
@@ -221,9 +222,39 @@ export default class Presentation extends React.Component {
               Merge
             </Heading>
             <Runner maxLines={15} code={require("raw!../assets/higher/merge/chat.js.asset").split("###")}
-              imports={{...RxImports}} >
+              imports={{...RxImports,
+                    getActiveVillains() {
+                      return Observable.of("Dr. evil",
+                          "Darth Vader",
+                          "Voldermort");
+                    },
+                    listen(name) {
+                      if (name === "Dr. evil") {
+                        return Observable.defer(() => Observable.of(
+                                   Observable.just({name, says: "One million dollars"}).delay(1000),
+                                   Observable.just({name, says: "\"Lazer\""}).delay(500),
+                                   Observable.just({name, says: "One hundred billion dollars"}).delay(2000)
+                                )).concatAll().repeat(3);
+                      }
+                      if (name === "Darth Vader") {
+                        return Observable.defer(() => Observable.of(
+                                   Observable.just({name, says: "I find your lack of faith disturbing"}).delay(1500),
+                                   Observable.just({name, says: "I am your father"}).delay(400)
+                                )).concatAll().repeat(3);
+                      }
+                      if (name === "Voldermort") {
+                        return Observable.defer(() => Observable.of(
+                                   Observable.just({name, says: "Harry Potter"}).delay(3500),
+                                   Observable.just({name, says: "AVADA KEDAVRA!"}).delay(1500),
+                                )).concatAll().repeat(3);
+                      }
+                    },
+                    appendLine(chatView, {name, says}) {
+                      chatView.innerHTML += `<div>${name} says: ${says}</div>`;
+                    }
+              }} >
               <DomOutput>
-                  <div id="chatView"></div>
+                    <div style={{marginTop: 40, overflowY:"auto"}} id="chatView"></div>
               </DomOutput>
             </Runner>
           </Slide>
@@ -232,7 +263,19 @@ export default class Presentation extends React.Component {
               Merge with concurrency limiting
             </Heading>
             <Runner maxLines={15} code={require("raw!../assets/higher/merge/download.js.asset").split("###")}
-              imports={{...RxImports}} >
+              imports={{...RxImports,
+                  getListOfSitesToDownload() {
+                    return Observable.defer(() => Observable.range(1, 10));
+                  },
+                  download(context, site) {
+                    return Observable.defer(() => {
+                      context.log("Downloading site:" + site);
+                      const size = Math.ceil(Math.random() * 4096) + 1000;
+                      const downloaded = {length: size * 100};
+                      return Observable.of(downloaded).delay(size).tap(() => context.log("Completed site:" + site));
+                    });
+                  }
+              }} >
               <ConsoleOutput>
               </ConsoleOutput>
             </Runner>
@@ -241,13 +284,13 @@ export default class Presentation extends React.Component {
             <Heading size={2} caps textColor="secondary" textFont="primary">
               Concat
             </Heading>
-            <Heading size={4}>Same as merge(1)</Heading>
+            <Heading size={4} textColor="secondary">Same as merge(1)</Heading>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
             <Heading size={2} caps textColor="secondary" textFont="primary">
               Concat
             </Heading>
-            <Heading size={4}>concatAll, concatMap</Heading>
+            <Heading size={4} textColor="secondary">concatAll, concatMap</Heading>
             <Runner maxLines={15} code={require("raw!../assets/higher/concat/counter.js.asset").split("###")}
               imports={{...RxImports}} >
               <DomOutput>
