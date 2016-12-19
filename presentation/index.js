@@ -9,6 +9,8 @@ import ReactDOM from "react-dom";
 import "rx-dom";
 require("./helpers/inject-op-tooltips");
 require("./index.css");
+Observable.prototype.exhaust = Observable.prototype.switchFirst;
+Observable.prototype.exhaustMap = Observable.prototype.flatMapFirst;
 
 // Import Spectacle Core tags
 import {
@@ -45,10 +47,15 @@ require("normalize.css");
 require("spectacle/lib/themes/default/index.css");
 
 const images = {
-  city: require("../assets/city.jpg")
+  city: require("../assets/city.jpg"),
+  voldermort : require("../assets/higher/merge/voldermort.png").replace("/", ""),
+  vader : require("../assets/higher/merge/vader.png").replace("/", ""),
+  drevil : require("../assets/higher/merge/drevil.png").replace("/", "")
 };
 
 preloader(images);
+
+console.log(images);
 
 const theme = createTheme({
   background: "#555a5f",
@@ -221,36 +228,40 @@ export default class Presentation extends React.Component {
             <Heading size={2} caps textColor="secondary" textFont="primary">
               Merge
             </Heading>
+            <Heading size={6} textColor="secondary">Chat</Heading>
             <Runner maxLines={15} code={require("raw!../assets/higher/merge/chat.js.asset").split("###")}
               imports={{...RxImports,
                     getActiveVillains() {
-                      return Observable.of("Dr. evil",
-                          "Darth Vader",
-                          "Voldermort");
+                      return Observable.of("drevil",
+                          "vader",
+                          "voldermort");
                     },
                     listen(name) {
-                      if (name === "Dr. evil") {
+                      if (name === "drevil") {
                         return Observable.defer(() => Observable.of(
                                    Observable.just({name, says: "One million dollars"}).delay(1000),
                                    Observable.just({name, says: "\"Lazer\""}).delay(500),
-                                   Observable.just({name, says: "One hundred billion dollars"}).delay(2000)
+                                   Observable.just({name, says: "One hundred billion dollars"}).delay(2000),
+                                   Observable.empty().delay(2000)
                                 )).concatAll().repeat(3);
                       }
-                      if (name === "Darth Vader") {
+                      if (name === "vader") {
                         return Observable.defer(() => Observable.of(
                                    Observable.just({name, says: "I find your lack of faith disturbing"}).delay(1500),
-                                   Observable.just({name, says: "I am your father"}).delay(400)
+                                   Observable.just({name, says: "I am your father"}).delay(400),
+                                   Observable.empty().delay(4000)
                                 )).concatAll().repeat(3);
                       }
-                      if (name === "Voldermort") {
+                      if (name === "voldermort") {
                         return Observable.defer(() => Observable.of(
                                    Observable.just({name, says: "Harry Potter"}).delay(3500),
                                    Observable.just({name, says: "AVADA KEDAVRA!"}).delay(1500),
                                 )).concatAll().repeat(3);
                       }
+                      return Observable.empty();
                     },
                     appendLine(chatView, {name, says}) {
-                      chatView.innerHTML += `<div>${name} says: ${says}</div>`;
+                      chatView.innerHTML += `<div><img src="${images[name]}" /> : ${says}</div>`;
                     }
               }} >
               <DomOutput>
@@ -306,14 +317,152 @@ export default class Presentation extends React.Component {
             <List>
             <ListItem>Only one active stream</ListItem>
             <Appear><ListItem>Ordering is perserved</ListItem></Appear>
+            <Appear><ListItem>A bit like unbounded queue</ListItem></Appear>
+            </List>
+          </Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              Concat
+            </Heading>
+            <Heading size={4} textColor="secondary">Events writer</Heading>
+            <Runner maxLines={15} code={require("raw!../assets/higher/concat/queue.js.asset").split("###")}
+              imports={{...RxImports,
+              getEvents() {
+                return Observable.of(Observable.just(["User entered site"]).delay(2000),
+                                       Observable.just(["User logged in"]).delay(5000),
+                                       Observable.just(["User add something to cart"]).delay(2000),
+                                       Observable.just(["User bought something"]).delay(1000),
+                                       Observable.just(["User left site"]).delay(6000)).concatAll();
+              },
+              enrich(x) {
+                return Observable.just(x);
+              }
+            }} >
+              <ConsoleOutput/>
+            </Runner>
+          </Slide>
+
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+              <Heading size={2}>Questions so far?</Heading>
+          </Slide>
+
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              Switch
+            </Heading>
+            <Heading size={6} textColor="secondary">switchMap, flatMapLatest, selectSwitch</Heading>
+            <Runner maxLines={15} code={require("raw!../assets/higher/switch/counter.js.asset").split("###")}
+              imports={{...RxImports}} >
+              <DomOutput>
+                  <button id="startButton" >Start</button>
+                  <div id="counterView"></div>
+              </DomOutput>
+            </Runner>
+          </Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              Switch
+            </Heading>
+            <List>
+            <ListItem>Only one active stream</ListItem>
+            <Appear><ListItem>Ordering is perserved</ListItem></Appear>
+            <Appear><ListItem>Older streams are irrelevant and therfore cancelled</ListItem></Appear>
+            <Appear><ListItem>** Items are dropped</ListItem></Appear>
+            </List>
+          </Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              Switch
+            </Heading>
+            <Heading size={4} textColor="secondary">Autosuggest</Heading>
+            <Runner maxLines={15} code={require("raw!../assets/higher/switch/Autosuggest.js.asset").split("###")}
+              imports={{...RxImports,
+              getMovies(q) {
+                if (q.length === 0) return Observable.empty();
+                return Observable.defer(()=>{
+                   return fetch("http://api.themoviedb.org/3/search/movie?api_key=9eae05e667b4d5d9fbb75d27622347fe&query=" + q).then(x=>x.json());
+                }).map(x=>x.results.map(m=>m.title)); 
+              },
+              displayTitles(titles, resultsView) {
+                return resultsView.innerHTML = titles.map(m=>`<div>${m}</div>`).join("");
+              }
+            }} >
+              <DomOutput>
+                  <input id="searchInput" placeholder="Enter movie title..." />
+                  <div id="resultsView"></div>
+              </DomOutput>
+            </Runner>
+          </Slide>
+
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              Exhaust
+            </Heading>
+            <Heading size={6} textColor="secondary">exhaust, flatMapFirst, switchFirst</Heading>
+            <Runner maxLines={15} code={require("raw!../assets/higher/exhaust/counter.js.asset").split("###")}
+              imports={{...RxImports}} >
+              <DomOutput>
+                  <button id="startButton" >Start</button>
+                  <div id="counterView"></div>
+              </DomOutput>
+            </Runner>
+          </Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              Exhaust
+            </Heading>
+            <List>
+            <ListItem>Only one active stream</ListItem>
+            <Appear><ListItem>Ordering is perserved</ListItem></Appear>
+            <Appear><ListItem>New streams are not created until active one finish</ListItem></Appear>
+            <Appear><ListItem>** Items are dropped</ListItem></Appear>
+            </List>
+          </Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              Exhaust
+            </Heading>
+            <Heading size={4} textColor="secondary">Profiler</Heading>
+            <Runner maxLines={15} code={require("raw!../assets/higher/exhaust/profiler.js.asset").split("###")}
+              imports={{...RxImports,
+              profile(context) {
+                  return Observable.defer(()=>{
+                    context.log("profiler start");
+                    const message = (Math.ceil(Math.random() * 1000) + 300) + "MB is allocated";
+                    return Observable.just(message).delay(3000);
+                  });
+              },
+              getErrorLogStream() {
+                return Observable.of(
+                    Observable.just("memory of undefined \n is undefined").delay(2000),
+                    Observable.just("error is undefined").delay(1000),
+                    Observable.just("function is not \n a function").delay(1000),
+                    Observable.just("array is not \n an array").delay(500),
+                    Observable.just("something went \n terribly wrong").delay(1000),
+                    Observable.just("array is not \n an array").delay(500),
+                ).concatAll();
+              }
+            }} >
+              <ConsoleOutput />
+            </Runner>
+          </Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              Operators summary
+            </Heading>
+            <List>
+              <Appear><ListItem>Merge - Concurrent, unordered, all items</ListItem></Appear>
+              <Appear><ListItem>Concat - 1 active stream, ordered, all items</ListItem></Appear>
+              <Appear><ListItem>Switch - 1 active stream, ordered, drop old streams</ListItem></Appear>
+              <Appear><ListItem>Exhaust - 1 active stream, ordered, ignore new streams</ListItem></Appear>
             </List>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
           <Heading size={2}>Other worth mentioning</Heading>
           <List>
-            <ListItem>combineAll</ListItem>
-            <Appear><ListItem>forkJoin</ListItem></Appear>
-            <Appear><ListItem>race</ListItem></Appear>
+            <ListItem>combineAll - combileLatest on all inner observables</ListItem>
+            <Appear><ListItem>forkJoin - a bit like promise.all()</ListItem></Appear>
+            <Appear><ListItem>race/amb - a bit like promise.race()</ListItem></Appear>
           </List>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
@@ -335,162 +484,6 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
             <Heading size={1}>Questions</Heading>
-          </Slide>
-
-
-
-
-          <Slide transition={["slide"]} bgDarken={0.75}>
-            <Text size={1} textColor="secondary" >
-                If we look on Event streams as collections...
-             </Text>
-             <Appear>
-             <Text textColor="secondary">
-                We can use all our collection tools and knowledge to process events which lead us to...
-             </Text>
-             </Appear>
-             <Appear>
-             <Text caps fit textColor="secondary">
-                Functional Programming!
-             </Text>
-             </Appear>
-          </Slide>
-          <Slide transition={["slide"]} bgDarken={0.75}>
-            <Text size={2} textColor="secondary" >
-                And that's the essence of RX and reactive programming/frp.
-             </Text>
-          </Slide>
-          <Slide transition={["slide"]} bgDarken={0.75}>
-            <Heading caps size={2} textColor="secondary" >
-                Definitions
-             </Heading>
-             <List>
-             <ListItem>Event stream == Observable</ListItem>
-             <ListItem>Operator - function that return observable from other observable like map, filter, etc...</ListItem>
-             </List>
-          </Slide>
-          <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading size={4} textColor="secondary" caps>Translate Example</Heading>
-            <Runner maxLines={15} code={require("raw!../assets/translate/translate.js.asset").split("###")}
-              imports={{
-                getInputElement:({elems:{translateExampleInput}}) => translateExampleInput,
-                getViewElement:({elems:{translateExampleOutput}}) => translateExampleOutput
-              }} >
-              <DomOutput>
-                  <input type="text" id="translateExampleInput" ></input>
-                  <pre style={{maxHeight: 200, overflow: "auto"}} id="translateExampleOutput"></pre>
-              </DomOutput>
-           </Runner>
-          </Slide>
-          <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading caps>Rx timeline</Heading>
-            <List>
-              <ListItem>2007 - Rx is born based on dualizing Iterable/Iterator interfaces</ListItem>
-              <Appear><ListItem>2009 - Rx.Net Released </ListItem></Appear>
-              <Appear><ListItem>2010 - RxJs</ListItem></Appear>
-              <Appear><ListItem>2010 - IObserable & IObserver are standardized in .net 4</ListItem></Appear>
-              <Appear><ListItem>2012 - Rx get open-sourced</ListItem></Appear>
-            </List>
-          </Slide>
-          <Slide bgColor="primary" transitionDuration={0} >
-            <Heading size={2} caps>Rx timeline </Heading>
-            <List>
-              <ListItem>2012 - Work started on RxJava</ListItem>
-              <Appear><ListItem>2014 - RxJava 1.0</ListItem></Appear>
-              <Appear><ListItem>2015 - Reactive Streams for Java 9</ListItem></Appear>
-              <Appear><ListItem>2015 - Obserable in ECMAScript (stage 1)</ListItem></Appear>
-              <Appear><ListItem>2015 - RxJS is rebuilt from scratch (rxjs-5)</ListItem></Appear>
-            </List>
-          </Slide>
-          <Slide bgColor="primary" transitionDuration={0} >
-            <Heading size={2} caps>Rx timeline </Heading>
-            <List>
-              <ListItem>Ports in many languages from ruby to c++</ListItem>
-              <Appear><ListItem>Ports in many platforms</ListItem></Appear>
-              <Appear><ListItem>Many clones/heavily inspired libs especially in js world</ListItem></Appear>
-              <Appear><ListItem>bacon.js, kefir.js, highland.js, most.js, xtream.js</ListItem></Appear>
-            </List>
-          </Slide>
-          <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading size={2} caps>Rx timeline</Heading>
-            <List>
-              <ListItem>Rx is a bit trending now but it's hardly new</ListItem>
-              <Appear><ListItem>Expect Observables to be everywhere in js future</ListItem></Appear>
-            </List>
-          </Slide>
-          <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading caps fit>Rx ecosystem in React</Heading>
-            <List>
-              <Appear><ListItem>Many libs and approaches</ListItem></Appear>
-              <Appear><ListItem>rx-recompose - build HOC with rx</ListItem></Appear>
-              <Appear><ListItem>react-cycle - mvi</ListItem></Appear>
-              <Appear><ListItem>react-combinators - use observables as props</ListItem></Appear>
-              <Appear><ListItem>flux implementations</ListItem></Appear>
-              <Appear><ListItem>Redux middleware</ListItem></Appear>
-            </List>
-          </Slide>
-          <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading size={5} textColor="secondary" caps>React Example - Clock</Heading>
-            <Runner maxLines={20} code={require("raw!../assets/react/clock.js.asset").split("###")}
-              imports={{...RxImports, ...ReactImports,
-                getAppContainer: ({elems: {reactClockAppContainer}}) => reactClockAppContainer
-              }} >
-              <DomOutput>
-                  <div id="reactClockAppContainer" ></div>
-              </DomOutput>
-           </Runner>
-          </Slide>
-          <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading size={5} textColor="secondary" caps>Scan operator</Heading>
-            <Runner imports={{Observable}} code={require("raw!../assets/scan/scan.js.asset").split("###")} maxLines={8} >
-              <ConsoleOutput/>
-              </Runner>
-          </Slide>
-          <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading size={5} textColor="secondary" caps>React Example - Counter</Heading>
-            <Runner maxLines={20} code={require("raw!../assets/react/counter.js.asset").split("###")}
-              imports={{...RxImports, ...ReactImports, ...RecomposeImports,
-                getAppContainer: ({elems: {reactCounterAppContainer}}) => reactCounterAppContainer
-              }} >
-              <DomOutput>
-                  <div id="reactCounterAppContainer" ></div>
-              </DomOutput>
-           </Runner>
-          </Slide>
-          <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Text textSize="3.5rem" textColor="secondary">Rx can be used everywhere, but it really shines in</Text>
-            <List>
-              <Appear><ListItem>Things that related to time</ListItem></Appear>
-              <Appear><ListItem>Realtime UI for live data</ListItem></Appear>
-              <Appear><ListItem>Complex user intents - drag&drop, long presses, gestures...</ListItem></Appear>
-              <Appear><ListItem>Complex async processing</ListItem></Appear>
-              <Appear><ListItem>Abstraction</ListItem></Appear>
-            </List>
-          </Slide>
-          <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading>But beware...</Heading>
-            <List>
-              <Appear><ListItem>Rx has a steep learning curve</ListItem></Appear>
-              <Appear><ListItem>Rx can sometime be too smart for it's own good</ListItem></Appear>
-              <Appear><ListItem>Rx require a lot of commitment for a library</ListItem></Appear>
-              <Appear><ListItem>Don't give up on Promises</ListItem></Appear>
-              <Appear><ListItem>Don't settle with ugly Rx solutions</ListItem></Appear>
-              <Appear><ListItem>Don't forget to dispose your subscriptions</ListItem></Appear>
-            </List>
-          </Slide>
-          <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading>Soluto</Heading>
-            <List>
-              <Appear><ListItem>Help people enjoy technology</ListItem></Appear>
-              <Appear><ListItem>Support, knowledge, education, empowerment, insights, security</ListItem></Appear>
-              <Appear><ListItem>Run on multple platforms and devices</ListItem></Appear>
-              <Appear><ListItem>Scale of hundreds of millions</ListItem></Appear>
-              <Appear><ListItem>Organizing the first rx-israel meetup soon</ListItem></Appear>
-              <Appear><ListItem>And of course, We're hiring...</ListItem></Appear>
-            </List>
-          </Slide>
-          <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading caps fit>Questions</Heading>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
             <Heading caps fit>Appendix</Heading>

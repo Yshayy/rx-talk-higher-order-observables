@@ -1,6 +1,6 @@
 var errorLogs = getErrorLogStream();
 
 errorLogs
-  .do((x)=>context.log(`error : {x}`))
-  .exhaustMap((x)=> profile())
-  .subscribe((p)=> write(context))
+  .do((error)=>context.log(`error : ${error}`))
+  .exhaustMap(()=> profile(context))
+  .subscribe((dump)=> context.log(dump))

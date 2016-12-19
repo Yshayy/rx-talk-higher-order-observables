@@ -1,7 +1,0 @@
-var {searchInput, resultsView} = context.elems
-
-Rx.DOM.input(startButton)
-      .switchMap(()=> Observable.interval(1000).take(5))
-      .subscribe(titles=> {
-              setTitles(resultsView, titles);
-      });

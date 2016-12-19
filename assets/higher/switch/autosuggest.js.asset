@@ -1,0 +1,8 @@
+var {searchInput, resultsView} = context.elems
+
+Rx.DOM.input(searchInput)
+      .select(e=>e.target.value)
+      .switchMap((query)=> getMovies(query))
+      .subscribe(titles=> {
+              displayTitles(titles, resultsView);
+      });

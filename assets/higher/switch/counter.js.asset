@@ -7,6 +7,8 @@ Rx.DOM.click(startButton)
               counterView.textContent = i;
       });
 ###
+let {startButton, counterView} = context.elems;
+
 Rx.DOM.click(startButton)
       .switchMap(()=> Observable.interval(1000).take(5))
       .subscribe(i=>{
