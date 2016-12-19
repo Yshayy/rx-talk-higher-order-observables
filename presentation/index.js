@@ -155,15 +155,9 @@ export default class Presentation extends React.Component {
               flatMap
             </Heading>
             <List>
-            <Appear><ListItem>Common concept (Monad.bind)</ListItem></Appear>
-            <Appear><ListItem>Appears in other types - optionals, tasks, lists</ListItem></Appear>
-            <Appear><ListItem>Used for chaining</ListItem></Appear>
-            <Appear>
-            <pre >
-                 {`Observable<T>{\nflatMap<U>(f: (t:T) => Observable<U>):Observable<U>\n}
-                 `}
-            </pre>
-            </Appear>
+              <ListItem>Common concept (Monad.bind)</ListItem>
+              <ListItem>Appears in other types - optionals, tasks, lists</ListItem>
+              <ListItem>Used for chaining</ListItem>
             </List>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
@@ -194,13 +188,13 @@ export default class Presentation extends React.Component {
             </Heading>
             <List>
             <ListItem>Merge is just one strategy to flat an observable</ListItem>
-            <Appear><ListItem>Rx got dedicated operators for handling Higher-order observable</ListItem></Appear>
+            <Appear><ListItem>Rx has dedicated operators for handling Higher-order observables</ListItem></Appear>
             <Appear><ListItem>Higher-order observable - observable of observable</ListItem></Appear>
             </List>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
             <Heading size={2} caps textColor="secondary" textFont="primary">
-              Flattening operators - Lets's start
+              Flattening operators - Let's start
             </Heading>
           </Slide>
           <Slide>
@@ -463,10 +457,10 @@ export default class Presentation extends React.Component {
               Operators summary
             </Heading>
             <List>
-              <Appear><ListItem>Merge - Concurrent, unordered, all items</ListItem></Appear>
-              <Appear><ListItem>Concat - 1 active stream, ordered, all items</ListItem></Appear>
-              <Appear><ListItem>Switch - 1 active stream, ordered, drop old streams</ListItem></Appear>
-              <Appear><ListItem>Exhaust - 1 active stream, ordered, ignore new streams</ListItem></Appear>
+              <ListItem>Merge - Concurrent, unordered, all items</ListItem>
+              <ListItem>Concat - 1 active stream, ordered, all items</ListItem>
+              <ListItem>Switch - 1 active stream, ordered, drop old streams</ListItem>
+              <ListItem>Exhaust - 1 active stream, ordered, ignore new streams</ListItem>
             </List>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
@@ -490,7 +484,6 @@ export default class Presentation extends React.Component {
           <Heading size={2}>Summary</Heading>
           <List>
             <ListItem>Higher order Observables are everywhere</ListItem>
-            <Appear><ListItem>Flattening Observables is must for using Observables everywhere</ListItem></Appear>
             <Appear><ListItem>Flattening Observables comes with different flavours</ListItem></Appear>
             <Appear><ListItem>Think about the right one the next time you use flatMap</ListItem></Appear>
           </List>
