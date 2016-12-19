@@ -105,7 +105,7 @@ export default class Presentation extends React.Component {
             </Heading>
             <List>
               <ListItem>Intro</ListItem>
-              <Appear><ListItem>Flattening operator</ListItem></Appear>
+              <Appear><ListItem>Flattening operators</ListItem></Appear>
               <Appear><ListItem>All the code is available online</ListItem></Appear>
             </List>
           </Slide>
@@ -146,13 +146,16 @@ export default class Presentation extends React.Component {
             <Heading size={2} caps textColor="secondary" textFont="primary">
               flatMap
             </Heading>
+            <List>
             <Appear><ListItem>Common concept (bind)</ListItem></Appear>
+            <Appear><ListItem>Appears in other types - optionals, tasks, lists</ListItem></Appear>
             <Appear>
-            <Markdown>
-                 Obserable[T]  
-                 flatMap[(f: (t:T) => Obserable[U]):Obserable[U]
-            </Markdown>
+            <pre >
+                 {`Observable<T>{\nflatMap<U>(f: (t:T) => Observable<U>):Observable<U>\n}
+                 `}
+            </pre>
             </Appear>
+            </List>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
             <Heading size={2} caps textColor="secondary" textFont="primary">
@@ -175,9 +178,14 @@ export default class Presentation extends React.Component {
                   <div id="counterView"></div>
               </DomOutput>
             </Runner>
+            </Slide>
+         <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+            <Heading size={2} caps textColor="secondary" textFont="primary">
+              flatMap
+            </Heading>
             <List>
             <ListItem>Merge is just one strategy to flat an observable</ListItem>
-            <Appear><ListItem>Rx got dedicated operators for handling High-order observable</ListItem></Appear>
+            <Appear><ListItem>Rx got dedicated operators for handling Higher-order observable</ListItem></Appear>
             <Appear><ListItem>Higher-order observable - observable of observable</ListItem></Appear>
             </List>
           </Slide>
@@ -257,7 +265,11 @@ export default class Presentation extends React.Component {
             <Appear><ListItem>Ordering is perserved</ListItem></Appear>
             </List>
           </Slide>
+<<<<<<< HEAD
           <Slide>
+=======
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+>>>>>>> d221cf686b9a06ce71ec16ecebc4d63c111d006d
           <Heading size={2}>Other worth mentioning</Heading>
           <List>
             <ListItem>combineAll</ListItem>
@@ -265,7 +277,11 @@ export default class Presentation extends React.Component {
             <Appear><ListItem>race</ListItem></Appear>
           </List>
           </Slide>
+<<<<<<< HEAD
           <Slide>
+=======
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
+>>>>>>> d221cf686b9a06ce71ec16ecebc4d63c111d006d
           <Heading size={2}>Creating Higher order observables</Heading>
           <List>
             <ListItem>map</ListItem>
@@ -273,7 +289,7 @@ export default class Presentation extends React.Component {
             <Appear><ListItem>window</ListItem></Appear>
           </List>
           </Slide>
-          <Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
           <Heading size={2}>Summary</Heading>
           <List>
             <ListItem>Higher order Observables are everywhere</ListItem>
@@ -282,7 +298,7 @@ export default class Presentation extends React.Component {
             <Appear><ListItem>Think about the right one the next time you use flatMap</ListItem></Appear>
           </List>
           </Slide>
-          <Slide>
+          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
             <Heading size={1}>Questions</Heading>
           </Slide>
 
