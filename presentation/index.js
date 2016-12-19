@@ -265,11 +265,7 @@ export default class Presentation extends React.Component {
             <Appear><ListItem>Ordering is perserved</ListItem></Appear>
             </List>
           </Slide>
-<<<<<<< HEAD
-          <Slide>
-=======
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
->>>>>>> d221cf686b9a06ce71ec16ecebc4d63c111d006d
           <Heading size={2}>Other worth mentioning</Heading>
           <List>
             <ListItem>combineAll</ListItem>
@@ -277,11 +273,7 @@ export default class Presentation extends React.Component {
             <Appear><ListItem>race</ListItem></Appear>
           </List>
           </Slide>
-<<<<<<< HEAD
-          <Slide>
-=======
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
->>>>>>> d221cf686b9a06ce71ec16ecebc4d63c111d006d
           <Heading size={2}>Creating Higher order observables</Heading>
           <List>
             <ListItem>map</ListItem>
