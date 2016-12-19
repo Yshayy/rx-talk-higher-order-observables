@@ -135,6 +135,7 @@ export default class Presentation extends React.Component {
             <List>
               <ListItem>Callback hell</ListItem>
               <Appear><ListItem>Not disposable</ListItem></Appear>
+              <Appear><ListItem>Diffcult to pass around</ListItem></Appear>
               </List>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
@@ -154,7 +155,7 @@ export default class Presentation extends React.Component {
               flatMap
             </Heading>
             <List>
-            <Appear><ListItem>Common concept (bind)</ListItem></Appear>
+            <Appear><ListItem>Common concept (Monad.bind)</ListItem></Appear>
             <Appear><ListItem>Appears in other types - optionals, tasks, lists</ListItem></Appear>
             <Appear><ListItem>Used for chaining</ListItem></Appear>
             <Appear>
@@ -202,6 +203,9 @@ export default class Presentation extends React.Component {
               Flattening operators - Lets's start
             </Heading>
           </Slide>
+          <Slide>
+            <Image src="http://reactivex.io/rxjs/img/mergeAll.png" width={600} />
+          </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
             <Heading size={2} caps textColor="secondary" textFont="primary">
               Merge
@@ -226,7 +230,7 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
             <Heading size={2} caps textColor="secondary" textFont="primary">
-              Merge
+              Merge - Example
             </Heading>
             <Heading size={6} textColor="secondary">Chat</Heading>
             <Runner maxLines={15} code={require("raw!../assets/higher/merge/chat.js.asset").split("###")}
@@ -291,6 +295,11 @@ export default class Presentation extends React.Component {
               </ConsoleOutput>
             </Runner>
           </Slide>
+
+          <Slide>
+            <Image src="http://reactivex.io/rxjs/img/concatAll.png" width={600} />
+          </Slide>
+
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
             <Heading size={2} caps textColor="secondary" textFont="primary">
               Concat
@@ -312,7 +321,7 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
             <Heading size={2} caps textColor="secondary" textFont="primary">
-              Concat
+              Concat 
             </Heading>
             <List>
             <ListItem>Only one active stream</ListItem>
@@ -322,28 +331,34 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
             <Heading size={2} caps textColor="secondary" textFont="primary">
-              Concat
+              Concat - Example
             </Heading>
-            <Heading size={4} textColor="secondary">Events writer</Heading>
-            <Runner maxLines={15} code={require("raw!../assets/higher/concat/queue.js.asset").split("###")}
+            <Heading size={4} textColor="secondary">Funds transfer</Heading>
+            <Runner maxLines={15} code={require("raw!../assets/higher/concat/bank.js.asset").split("###")}
               imports={{...RxImports,
-              getEvents() {
-                return Observable.of(Observable.just(["User entered site"]).delay(2000),
-                                       Observable.just(["User logged in"]).delay(5000),
-                                       Observable.just(["User add something to cart"]).delay(2000),
-                                       Observable.just(["User bought something"]).delay(1000),
-                                       Observable.just(["User left site"]).delay(6000)).concatAll();
+              transfer(amount, context) {
+                context.amount -= parseInt(amount);
+                return Observable.just(context.amount).delay(2000);
               },
               enrich(x) {
-                return Observable.just(x);
+                return Observable.just(x).delay(Math.random() * 5000 + 1000);
               }
             }} >
-              <ConsoleOutput/>
+              <DomOutput>
+                  <div>
+                  <input id="amountInput" style={{width:60}} value="5" /><button id="transferButton">transfer</button>
+                  </div>
+                  <div id="balanceView">1000</div>
+              </DomOutput>
             </Runner>
           </Slide>
 
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
               <Heading size={2}>Questions so far?</Heading>
+          </Slide>
+
+          <Slide>
+            <Image src="http://reactivex.io/rxjs/img/switch.png" width={600} />
           </Slide>
 
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
@@ -372,7 +387,7 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
             <Heading size={2} caps textColor="secondary" textFont="primary">
-              Switch
+              Switch - Example
             </Heading>
             <Heading size={4} textColor="secondary">Autosuggest</Heading>
             <Runner maxLines={15} code={require("raw!../assets/higher/switch/Autosuggest.js.asset").split("###")}
@@ -392,6 +407,10 @@ export default class Presentation extends React.Component {
                   <div id="resultsView"></div>
               </DomOutput>
             </Runner>
+          </Slide>
+
+          <Slide>
+            <Image src="http://reactivex.io/rxjs/img/exhaust.png" width={600} />
           </Slide>
 
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
@@ -420,27 +439,20 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
             <Heading size={2} caps textColor="secondary" textFont="primary">
-              Exhaust
+              Exhaust - Example
             </Heading>
-            <Heading size={4} textColor="secondary">Profiler</Heading>
-            <Runner maxLines={15} code={require("raw!../assets/higher/exhaust/profiler.js.asset").split("###")}
+            <Heading size={4} textColor="secondary">Screen share</Heading>
+            <Runner maxLines={15} code={require("raw!../assets/higher/exhaust/screenshare.js.asset").split("###")}
               imports={{...RxImports,
-              profile(context) {
-                  return Observable.defer(()=>{
-                    context.log("profiler start");
-                    const message = (Math.ceil(Math.random() * 1000) + 300) + "MB is allocated";
-                    return Observable.just(message).delay(3000);
-                  });
+              screenCapture(){
+                 return Observable.just(1).expand((i)=> Observable.just(i+1).delay(20));
               },
-              getErrorLogStream() {
-                return Observable.of(
-                    Observable.just("memory of undefined \n is undefined").delay(2000),
-                    Observable.just("error is undefined").delay(1000),
-                    Observable.just("function is not \n a function").delay(1000),
-                    Observable.just("array is not \n an array").delay(500),
-                    Observable.just("something went \n terribly wrong").delay(1000),
-                    Observable.just("array is not \n an array").delay(500),
-                ).concatAll();
+              sendScreen(screen, context) {
+                  return Observable.defer(()=> {
+                    context.log("start sending screen");
+                    const delay = (Math.ceil(Math.random() * 1000) + 300);
+                    return Observable.just(screen).delay(delay);
+                  });
               }
             }} >
               <ConsoleOutput />
@@ -461,6 +473,7 @@ export default class Presentation extends React.Component {
           <Heading size={2}>Other worth mentioning</Heading>
           <List>
             <ListItem>combineAll - combileLatest on all inner observables</ListItem>
+            <Appear><ListItem>concatEager - concurrent but items emitted in order</ListItem></Appear>
             <Appear><ListItem>forkJoin - a bit like promise.all()</ListItem></Appear>
             <Appear><ListItem>race/amb - a bit like promise.race()</ListItem></Appear>
           </List>

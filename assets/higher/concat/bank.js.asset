@@ -1,0 +1,10 @@
+let {transferButton, amountInput, balanceView} 
+= context.elems;
+
+context.amount = 1000;
+
+Rx.DOM.click(transferButton)
+.select(()=> amountInput.value)
+.concatMap((amount)=> transfer(amount, context))
+.subscribe((balance)=> 
+balanceView.textContent = balance)

@@ -1,0 +1,5 @@
+var screens = screenCapture();
+
+screens.exhaustMap(screen=> sendScreen(screen, context) )
+       .subscribe(screen=> 
+       context.log(`screen ${screen} was sent`) )
